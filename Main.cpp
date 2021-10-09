@@ -8,7 +8,7 @@
 using namespace sf;
 int main()
 {
-    RenderWindow window(VideoMode(640, 480), "Game", Style::Titlebar | Style::Close);
+    RenderWindow window(VideoMode(800, 600), "Asteroids", Style::Titlebar | Style::Close);
     CircleShape shape(100.f);
     shape.setFillColor(Color::Green);
 
