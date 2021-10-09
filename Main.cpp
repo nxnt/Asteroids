@@ -1,29 +1,24 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
+#include "Game.h"
 
-using namespace sf;
 int main()
 {
-    RenderWindow window(VideoMode(800, 600), "Asteroids", Style::Titlebar | Style::Close);
-    CircleShape shape(100.f);
-    shape.setFillColor(Color::Green);
-
+    RenderWindow window(VideoMode(1920, 1080), "Asteroids", Style::Fullscreen | Style::Close);
+    Game game(&window);
+    float deltaTime = 0.f;
+    Clock clock;
     while (window.isOpen())
     {
+        deltaTime = clock.restart().asSeconds();
         Event ev;
         while (window.pollEvent(ev))
         {
+            if (ev.type == Event::KeyPressed && Keyboard::isKeyPressed(Keyboard::Escape))
+                window.close();
             if (ev.type == Event::Closed)
                 window.close();
         }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
+        game.Update(deltaTime);
+        game.Draw();
     }
     return 0;
 }
