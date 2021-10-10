@@ -1,9 +1,10 @@
 #include "Player.h"
 
-Player::Player(Texture* texture, Vector2f position)
+Player::Player(Texture* texture, Vector2f position,Texture* bulletTexture)
 {
 	this->position = position;
 	this->texture = texture;
+	this->bulletTexture = bulletTexture;
 	this->triangle.setPosition(this->position.x, this->position.y);
 	this->triangle.setRadius(80);
 	this->triangle.setPointCount(3);
@@ -13,6 +14,8 @@ Player::Player(Texture* texture, Vector2f position)
 	this->acceleration = 10;
 	this->mu = 0.1f;
 	this->rotateSpeed = 120;
+	this->shootTimerMax = 25.f;
+	this->shootTimer = this->shootTimerMax;
 }
 
 Player::~Player()
@@ -50,12 +53,22 @@ void Player::Movement(float deltaTime)
 
 void Player::Shoot()
 {
-
+	if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer >= shootTimerMax)
+	{
+		Vector2f bulletDir = normalize(rotateVector(Vector2f(0,-1), this->triangle.getRotation()));
+		this->bullets.push_back(Bullet(this->bulletTexture, 30, triangle.getPosition(), bulletDir,triangle.getRotation()));
+		shootTimer = 0;
+	}
 }
 
 void Player::Update(float deltaTime)
 {
 	Movement(deltaTime);
+	Shoot();
+	if (shootTimer < shootTimerMax)
+	{
+		shootTimer++;
+	}
 	if (this->triangle.getPosition().x < 0 + this->triangle.getRadius())
 	{
 		this->triangle.setPosition(Vector2f(0 + this->triangle.getRadius(), this->triangle.getPosition().y));
@@ -77,5 +90,9 @@ void Player::Update(float deltaTime)
 
 void Player::Draw(RenderTarget& target)
 {
+	for (size_t i = 0; i < bullets.size(); i++)
+	{
+		bullets[i].Draw(target);
+	}
 	target.draw(this->triangle);
 }

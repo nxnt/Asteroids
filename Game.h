@@ -8,6 +8,7 @@ private:
 	RenderWindow* window;
 	vector<Player> player;
 	Texture playerTexture;
+	Texture bulletTexture;
 public:
 
 	//Constructors / Destructors
