@@ -2,7 +2,9 @@
 
 int main()
 {
+    srand(time(NULL));
     RenderWindow window(VideoMode(1920, 1080), "Asteroids", Style::Fullscreen | Style::Close);
+    window.setVerticalSyncEnabled(true);
     Game game(&window);
     float deltaTime = 0.f;
     Clock clock;

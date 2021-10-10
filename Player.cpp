@@ -8,7 +8,11 @@ Player::Player(Texture* texture, Vector2f position)
 	this->triangle.setRadius(80);
 	this->triangle.setPointCount(3);
 	this->triangle.setTexture(this->texture);
-	this->moveSpeed = 100.f;
+	this->triangle.setOrigin(this->triangle.getRadius(), this->triangle.getRadius());
+	this->maxSpeed = 300.f;
+	this->acceleration = 10;
+	this->mu = 0.1f;
+	this->rotateSpeed = 120;
 }
 
 Player::~Player()
@@ -18,25 +22,30 @@ Player::~Player()
 
 void Player::Movement(float deltaTime)
 {
-	this->dir.x = this->moveSpeed * sin((this->triangle.getRotation() * M_PI) / 180);
-	this->dir.y = this->moveSpeed * -cos((this->triangle.getRotation() * M_PI) / 180);
+	this->dir = Vector2f();
 	if (Keyboard::isKeyPressed(Keyboard::A))
 	{
-		this->triangle.rotate(-deltaTime * this->moveSpeed);
+		this->triangle.rotate(-deltaTime * this->rotateSpeed);
 	}
 	if (Keyboard::isKeyPressed(Keyboard::D))
 	{
-		this->triangle.rotate(deltaTime * this->moveSpeed);
+		this->triangle.rotate(deltaTime * this->rotateSpeed);
 	}
 	if (Keyboard::isKeyPressed(Keyboard::W))
 	{
-		this->triangle.move(this->dir.x * deltaTime,this->dir.y * deltaTime);
+		this->dir.y = -1;
+		this->velocity += normalize(rotateVector(this->dir, this->triangle.getRotation())) * this->acceleration * deltaTime;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::S))
+	else
 	{
-		this->triangle.move(this->dir.x * -deltaTime,this->dir.y * -deltaTime);
+		this->velocity -= (velocity * (1 - mu)) * deltaTime;
 	}
 
+	if (lenght(velocity) > maxSpeed * deltaTime)
+	{
+		velocity = normalize(velocity) * maxSpeed * deltaTime;
+	}
+	triangle.move(velocity);
 }
 
 void Player::Shoot()
@@ -46,8 +55,24 @@ void Player::Shoot()
 
 void Player::Update(float deltaTime)
 {
-	this->triangle.setOrigin(Vector2f(this->triangle.getLocalBounds().width / 2.f, this->triangle.getLocalBounds().height / 2.f));
 	Movement(deltaTime);
+	if (this->triangle.getPosition().x < 0 + this->triangle.getRadius())
+	{
+		this->triangle.setPosition(Vector2f(0 + this->triangle.getRadius(), this->triangle.getPosition().y));
+	}
+	if (this->triangle.getPosition().x > 1920 - this->triangle.getRadius())
+	{
+		this->triangle.setPosition(Vector2f(1920 - this->triangle.getRadius(), this->triangle.getPosition().y));
+	}
+	if (this->triangle.getPosition().y < 0 + this->triangle.getRadius())
+	{
+		this->triangle.setPosition(Vector2f(this->triangle.getPosition().x, 0 + this->triangle.getRadius()));
+	}
+	if (this->triangle.getPosition().y > 1080 - this->triangle.getRadius())
+	{
+		this->triangle.setPosition(Vector2f(this->triangle.getPosition().x, 1080 - this->triangle.getRadius()));
+	}
+
 }
 
 void Player::Draw(RenderTarget& target)

@@ -8,7 +8,12 @@ private:
 	CircleShape triangle;
 	Vector2f position;
 	Vector2f dir;
-	float moveSpeed;
+	Vector2f velocity;
+	float maxSpeed;
+	float acceleration;
+	float mu;
+	float rotateSpeed;
+
 public:
 	Player(Texture* texture,Vector2f position);
 	~Player();
@@ -16,6 +21,7 @@ public:
 	void Shoot();
 	void Update(float deltaTime);
 	void Draw(RenderTarget &target);
+
 
 };
 
