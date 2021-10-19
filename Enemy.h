@@ -5,18 +5,23 @@ class Enemy
 {
 private:
 	Texture* texture;
-	Vector2f direction;
+	double direction;
 	float speed;
 	Vector2f position;
 	Sprite sprite;
+	double s;
+	double offset_direction;
+
+	int size;
 
 public:
-	Enemy(Texture* texture,Vector2f direction,float speed,Vector2f position);
+	Enemy(Texture* texture,Vector2f player_position, double direction, float speed,Vector2f position, int size);
 	~Enemy();
 	void Movement(float deltaTime);
 	void Update(float deltaTime);
 	void Draw(RenderTarget&target);
-	inline const Vector2f& getPosition()const { return this->sprite.getPosition(); }
+	int getCurrentSize();
+	inline const Vector2f getPosition()const { return this->sprite.getPosition(); }
 	inline FloatRect getGlobalBound()const { return this->sprite.getGlobalBounds(); }
 	float vectorLength(Vector2f v) 
 	{ 

@@ -6,7 +6,8 @@ class Game
 {
 private:
 	
-	RenderWindow* window;
+	Vector2f position;
+ 	RenderWindow* window;
 	vector<Player> player;
 	vector<Enemy> enemies;
 	Texture playerTexture;
@@ -21,6 +22,7 @@ public:
 	Game(RenderWindow* window);
 	~Game();
 
+	void spawnAsteroid(Vector2f position, double direction, int size);
 	void Update(float deltaTime);
 	void Draw();
 };

@@ -17,6 +17,7 @@ private:
 	float rotateSpeed;
 	float shootTimer;
 	float shootTimerMax;
+	int inv;
 
 public:
 	Player(Texture* texture, Vector2f position, Texture* bulletTexture);
@@ -25,6 +26,9 @@ public:
 	void Shoot();
 	void Update(float deltaTime);
 	void Draw(RenderTarget& target);
+
+	int getInvincibility();
+	void setInvincibility(int time);
 
 	inline vector<Bullet>& getBullets() { return this->bullets; }
 	inline const Vector2f& getPosition()const { return this->triangle.getPosition(); }

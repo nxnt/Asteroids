@@ -15,7 +15,7 @@ public:
 	void Movement();
 	void Update();
 	void Draw(RenderTarget& target);
-	inline const Vector2f& getPosition()const { return this->sprite.getPosition(); }
+	inline const Vector2f getPosition()const { return this->sprite.getPosition(); }
 	inline FloatRect getGlobalBound()const { return this->sprite.getGlobalBounds(); }
 };
 

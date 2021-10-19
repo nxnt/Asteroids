@@ -16,11 +16,20 @@ Player::Player(Texture* texture, Vector2f position,Texture* bulletTexture)
 	this->rotateSpeed = 120;
 	this->shootTimerMax = 25.f;
 	this->shootTimer = this->shootTimerMax;
+	this->inv = 0;
 }
 
 Player::~Player()
 {
 
+}
+
+int Player::getInvincibility()  {
+	return this->inv;
+}
+
+void Player::setInvincibility(int time) {
+	this->inv = time;
 }
 
 void Player::Movement(float deltaTime)
@@ -85,7 +94,12 @@ void Player::Update(float deltaTime)
 	{
 		this->triangle.setPosition(Vector2f(this->triangle.getPosition().x, 1080 - this->triangle.getRadius()));
 	}
-
+	if (inv > 0)
+	{
+		inv--;
+		this->triangle.setFillColor(sf::Color(255, 255, 255, 255)); // เซ็ตให้ปกติ
+		if(inv % 30 > 15) this->triangle.setFillColor(sf::Color(255, 0, 0, 150)); // เซ็ตให้หายไป
+	}
 }
 
 void Player::Draw(RenderTarget& target)
