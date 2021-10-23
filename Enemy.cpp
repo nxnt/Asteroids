@@ -12,7 +12,7 @@ Enemy::Enemy(Texture* texture, Vector2f player_position, double direction, float
 	this->offset_direction = direction * M_PI / 180;
 	this->size = size;
 
-	sprite.setScale(0.5 * size, 0.5 * size);
+	sprite.setScale(0.05 * size, 0.05 * size);
 }
 
 Enemy::~Enemy()

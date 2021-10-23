@@ -65,7 +65,17 @@ void Player::Shoot()
 	if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer >= shootTimerMax)
 	{
 		Vector2f bulletDir = normalize(rotateVector(Vector2f(0,-1), this->triangle.getRotation()));
-		this->bullets.push_back(Bullet(this->bulletTexture, 30, triangle.getPosition(), bulletDir,triangle.getRotation()));
+		this->bullets.push_back
+		(
+			Bullet
+			(
+				this->bulletTexture, 
+				30, 
+				triangle.getPosition(), 
+				bulletDir,
+				triangle.getRotation()
+			)
+		);
 		shootTimer = 0;
 	}
 }
