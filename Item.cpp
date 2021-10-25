@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item(Texture* texture,Vector2f position,float time,int type)
+Item::Item(Texture* texture,Vector2f position,float time, int type)
 {
 	this->texture = texture;
 	this->position = position;
@@ -9,7 +9,7 @@ Item::Item(Texture* texture,Vector2f position,float time,int type)
 	sprite.setPosition(this->position);
 	sprite.setTexture(*this->texture);
 	sprite.setOrigin(Vector2f(texture->getSize()) / 2.f);
-	sprite.setScale(0.25,0.25);
+	sprite.setScale(0.3,0.3);
 }
 
 Item::~Item()

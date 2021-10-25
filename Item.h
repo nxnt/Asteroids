@@ -17,6 +17,8 @@ public:
 	int getDelay();
 	void setDelay(int time);
 	void Draw(RenderTarget& target);
+	inline const Vector2f getPosition()const { return this->sprite.getPosition(); }
+	inline FloatRect getGlobalBound()const { return this->sprite.getGlobalBounds(); }
 	int getType();
 };
 

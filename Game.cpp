@@ -8,6 +8,9 @@ Game::Game(RenderWindow* window)
 	this->enemyTexture.loadFromFile("Texture/Enemy/asteroid1.png");
 	this->backgroundTexture.loadFromFile("Texture/Background/background.jpg");
 	this->shieldTexture.loadFromFile("Texture/Item/shield.png");
+	this->healTexture.loadFromFile("Texture/Item/heal.png");
+	this->shield.setTexture(this->shieldTexture);
+	this->shield.setScale(0.7, 0.7);
 	this->player.push_back(
 		Player
 		(
@@ -18,6 +21,7 @@ Game::Game(RenderWindow* window)
 	);
 	this->enemySpawnTimerMax = 3.f;
 	this->enemySpawnTimer = enemySpawnTimerMax;
+	this->shieldTimer = -1;
 	background.setTexture(backgroundTexture);
 }
 
@@ -28,7 +32,7 @@ Game::~Game()
 
 void Game::spawnItem(Vector2f position)
 {
-	int random = randrange(1,1);
+	int random = randrange(1,2);
 	if (random == 1)
 	{
 		item.push_back
@@ -37,10 +41,24 @@ void Game::spawnItem(Vector2f position)
 			(
 				&this->shieldTexture,
 				position,
-				600
+				600,
+				1
 			)
 		);
-	}	
+	}
+	if (random == 2)
+	{
+		item.push_back
+		(
+			Item
+			(
+				&this->healTexture,
+				position,
+				600,
+				2
+			)
+		);
+	}
 	
 }
 
@@ -83,10 +101,39 @@ void Game::Update(float deltaTime)
 		Game::spawnAsteroid(Vector2f(random_x, random_y), 0, 2);
 		enemySpawnTimer = 0;
 	}
-
+	if (shieldTimer > 0)
+	{
+		shieldTimer--;
+		this->shield.setColor(sf::Color(255, 255, 255, 255));
+		if (shieldTimer % 30 > 15 && shieldTimer < 300)
+		{
+			this->shield.setColor(sf::Color(255, 255, 255, 150));
+		}
+	}
+	if (shieldTimer <= 0)
+	{
+		useShield = false;
+	}
 	for (size_t i = 0; i < this->player.size(); i++)
 	{
 		this->player[i].Update(deltaTime);
+		for (int m = 0; m < item.size(); m++)
+		{
+			item[m].Update();
+			if (item[m].getGlobalBound().intersects(player[i].getGlobalBound()) && item[m].getType() == 1)
+			{
+				shieldTimer = 600;
+				useShield = true;
+				item.erase(item.begin() + m);
+				
+			}
+		}
+		if (useShield)
+		{
+			this->shield.setPosition(player[i].getPosition().x - 25.f, player[i].getPosition().y - 30.f);
+			this->shield.setOrigin(player[i].getOrigin());
+
+		}
 		for (size_t j = 0; j < this->enemies.size(); j++)
 		{
 			//เมื่ออุกบาทออกเกม
@@ -100,15 +147,33 @@ void Game::Update(float deltaTime)
 			//เมื่อยานชนกับอุกบาท
 			if (enemies[j].getGlobalBound().intersects(player[i].getGlobalBound()))
 			{
-				if (player[i].getInvincibility() <= 0) {
-					player[i].setInvincibility(300);
-					if (enemies[j].getCurrentSize() > 0) {
-						for (int i = 0; i < randrange(1, 3); i++) {
-							Game::spawnAsteroid(Vector2f(enemies[j].getPosition().x + randrange(-10, 10), enemies[j].getPosition().y + randrange(-10, 10)), randrange(0, 360), enemies[j].getCurrentSize() - 1);
+				if (useShield)
+				{
+					if (enemies[j].getCurrentSize() > 0)
+					{
+						for (int i = 0; i < randrange(1, 3); i++)
+						{
+							Game::spawnAsteroid(Vector2f(enemies[j].getPosition().x + randrange(-20, 20), enemies[j].getPosition().y + randrange(-20, 20)), randrange(0, 360), enemies[j].getCurrentSize() - 1);
 						}
 					}
 					enemies.erase(enemies.begin() + j);
 					break;
+				}
+				else
+				{
+					if (player[i].getInvincibility() <= 0) 
+					{
+						player[i].setInvincibility(300);
+						if (enemies[j].getCurrentSize() > 0) 
+						{
+							for (int i = 0; i < randrange(1, 3); i++) 
+							{
+								Game::spawnAsteroid(Vector2f(enemies[j].getPosition().x + randrange(-20, 20), enemies[j].getPosition().y + randrange(-20, 20)), randrange(0, 360), enemies[j].getCurrentSize() - 1);
+							}
+						}
+						enemies.erase(enemies.begin() + j);
+						break;
+					}
 				}
 			}
 		}
@@ -125,13 +190,14 @@ void Game::Update(float deltaTime)
 				// เมื่ออุกกาบาทชนกระสุน
 				if (player[i].getBullets()[k].getGlobalBound().intersects(enemies[l].getGlobalBound()))
 				{
-					int rate = 6;
+					int rate = randrange(6,6);
 					//แตกตัว
 					if (enemies[l].getCurrentSize() > 0) {
 						for (int i = 0; i < randrange(2, 3); i++) {
 							Game::spawnAsteroid(Vector2f(enemies[l].getPosition().x + randrange(-10, 10), enemies[l].getPosition().y + randrange(-10, 10)), randrange(0, 360), enemies[l].getCurrentSize() - 1);
 						}
 					}
+					//สุ่มดรอปไอเทมพิเศษ
 					if (enemies[l].getCurrentSize() == 1)
 					{
 						if (rate == 6)
@@ -144,7 +210,9 @@ void Game::Update(float deltaTime)
 					break;
 				}
 			}
+			
 		}
+		
 	}
 	for (size_t i = 0; i < item.size(); i++)
 	{
@@ -163,6 +231,10 @@ void Game::Draw()
 	for (size_t i = 0; i < this->player.size(); i++)
 	{
 		this->player[i].Draw(*this->window);
+		if (useShield)
+		{
+			this->window->draw(shield);
+		}
 	}
 	for (size_t i = 0; i < this->enemies.size(); i++)
 	{

@@ -16,9 +16,13 @@ private:
 	Texture enemyTexture;
 	Texture backgroundTexture;
 	Texture shieldTexture;
+	Texture healTexture;
 	Sprite background;
+	Sprite shield;
+	bool useShield = false;
 	float enemySpawnTimerMax;
 	float enemySpawnTimer;
+	int  shieldTimer;
 	
 public:
 

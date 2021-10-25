@@ -33,5 +33,6 @@ public:
 	inline vector<Bullet>& getBullets() { return this->bullets; }
 	inline const Vector2f& getPosition()const { return this->triangle.getPosition(); }
 	inline FloatRect getGlobalBound()const { return this->triangle.getGlobalBounds(); }
+	inline Vector2f getOrigin() { return this->triangle.getOrigin(); }
 };
 
