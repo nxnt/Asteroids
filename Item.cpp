@@ -9,7 +9,14 @@ Item::Item(Texture* texture,Vector2f position,float time, int type)
 	sprite.setPosition(this->position);
 	sprite.setTexture(*this->texture);
 	sprite.setOrigin(Vector2f(texture->getSize()) / 2.f);
-	sprite.setScale(0.3,0.3);
+	if (this->type == 1)
+	{
+		sprite.setScale(0.15,0.15);
+	}
+	else
+	{
+		sprite.setScale(0.3,0.3);
+	}
 }
 
 Item::~Item()

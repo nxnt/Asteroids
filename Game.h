@@ -16,6 +16,7 @@ private:
 	Texture enemyTexture;
 	Texture backgroundTexture;
 	Texture shieldTexture;
+	Texture shield1Texture;
 	Texture healTexture;
 	Sprite background;
 	Sprite shield;

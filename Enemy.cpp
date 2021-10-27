@@ -7,17 +7,41 @@ Enemy::Enemy(Texture* texture, Vector2f player_position, double direction, float
 	this->position = position;
 	sprite.setPosition(this->position);
 	sprite.setTexture(*this->texture);
-
+	this->enemyMaxHp = 25 * size;
+	this->enemyHp = enemyMaxHp;
 	this->direction = atan2f(player_position.y - position.y, player_position.x - position.x);
 	this->offset_direction = direction * M_PI / 180;
 	this->size = size;
-
-	sprite.setScale(0.1 * size, 0.1 * size);
+	this->flash = 0;
+	sprite.setScale(0.05 * size, 0.05 * size);
 }
 
 Enemy::~Enemy()
 {
 
+}
+
+void Enemy::setEnemyHp(int hp)
+{
+	this->enemyHp += hp;
+	if (this->enemyHp < 0)
+	{
+		this->enemyHp = 0;
+	}
+	if (this->enemyHp >= enemyMaxHp)
+	{
+		this->enemyHp = enemyMaxHp;
+	}
+}
+
+int Enemy::getEnemyHp()
+{
+	return this->enemyHp;
+}
+
+void Enemy::setFlash()
+{
+	this->flash = 10;
 }
 
 int Enemy::getCurrentSize() {
@@ -33,6 +57,12 @@ void Enemy::Movement(float deltaTime)
 void Enemy::Update(float deltaTime)
 {
 	Movement(deltaTime);
+	this->sprite.setColor(sf::Color(255, 255, 255, 255));
+	if (this->flash > 0)
+	{
+		this->sprite.setColor(sf::Color(255, 0, 0, 255));
+		this->flash--;
+	}
 }
 
 

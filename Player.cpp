@@ -34,6 +34,14 @@ Player::~Player()
 void Player::setHp(int hp)
 {
 	this->hp += hp;
+	if (this->hp < 0)
+	{
+		this->hp = 0;
+	}
+	if (this->hp >= maxHp)
+	{
+		this->hp = maxHp;
+	}
 }
 
 int Player::getInvincibility()  {
@@ -76,7 +84,7 @@ void Player::Shoot()
 {
 	if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer >= shootTimerMax)
 	{
-		/*Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation()));
+		Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation()));
 		this->bullets.push_back
 		(
 			Bullet
@@ -87,8 +95,8 @@ void Player::Shoot()
 				bulletDir,
 				triangle.getRotation()
 			)
-		);*/
-		Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 3));
+		);
+		bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 10));
 		this->bullets.push_back
 		(
 			Bullet
@@ -100,7 +108,7 @@ void Player::Shoot()
 				triangle.getRotation()
 			)
 		);
-		bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 3));
+		bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 10));
 		this->bullets.push_back
 		(
 			Bullet
@@ -149,14 +157,6 @@ void Player::Update(float deltaTime)
 		if(inv % 30 > 15) this->triangle.setFillColor(sf::Color(255, 0, 0, 150)); // à«çµãËéËÒÂä»
 	}
 	float player_hp = ((float)this->hp / (float)this->maxHp) * 500.f;
-	if (player_hp > 500.f)
-	{
-		player_hp = 500.f;
-	}
-	else if (player_hp < 0)
-	{
-		player_hp = 0.f;
-	}
 	this->health_red.setSize(Vector2f(player_hp, 30.f));
 }
 
