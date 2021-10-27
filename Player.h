@@ -7,6 +7,8 @@ private:
 	Texture* texture;
 	Texture* bulletTexture;
 	CircleShape triangle;
+	RectangleShape health_red;
+	RectangleShape health_white;
 	Vector2f position;
 	Vector2f dir;
 	Vector2f velocity;
@@ -18,6 +20,9 @@ private:
 	float shootTimer;
 	float shootTimerMax;
 	int inv;
+	int hp;
+	int maxHp;
+	int level;
 
 public:
 	Player(Texture* texture, Vector2f position, Texture* bulletTexture);
@@ -29,6 +34,7 @@ public:
 
 	int getInvincibility();
 	void setInvincibility(int time);
+	void setHp(int hp);
 
 	inline vector<Bullet>& getBullets() { return this->bullets; }
 	inline const Vector2f& getPosition()const { return this->triangle.getPosition(); }

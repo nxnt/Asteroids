@@ -23,6 +23,7 @@ private:
 	float enemySpawnTimerMax;
 	float enemySpawnTimer;
 	int  shieldTimer;
+	int hp;
 	
 public:
 

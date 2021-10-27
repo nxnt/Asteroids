@@ -22,6 +22,7 @@ Game::Game(RenderWindow* window)
 	this->enemySpawnTimerMax = 3.f;
 	this->enemySpawnTimer = enemySpawnTimerMax;
 	this->shieldTimer = -1;
+	this->hp = 100;
 	background.setTexture(backgroundTexture);
 }
 
@@ -80,10 +81,12 @@ void Game::spawnAsteroid(Vector2f position, double direction, int size) {
 
 void Game::Update(float deltaTime)
 {
+	//ดีเลย์ในการเกิด
 	if (enemySpawnTimer <= enemySpawnTimerMax)
 	{
 		enemySpawnTimer += deltaTime;
 	}
+	//สุ่มตำแหน่งเกิดของ enemy
 	if (enemySpawnTimer >= enemySpawnTimerMax)
 	{
 		int behave = randrange(0, 1);
@@ -91,16 +94,17 @@ void Game::Update(float deltaTime)
 		double random_y;
 		if (behave) {
 			random_x = randrange(0, 1920);
-			random_y = randrange(0, 1) * 1080;
+			random_y = double(randrange(0, 1) * 1080);
 		}
 		else {
-			random_x = randrange(0, 1) * 1920;
+			random_x = double(randrange(0, 1) * 1920);
 			random_y = randrange(0, 1080);
 		}
 
 		Game::spawnAsteroid(Vector2f(random_x, random_y), 0, 2);
 		enemySpawnTimer = 0;
 	}
+	//กระพิบเมื่อเวลาของ shield ใกล้หมด
 	if (shieldTimer > 0)
 	{
 		shieldTimer--;
@@ -110,6 +114,7 @@ void Game::Update(float deltaTime)
 			this->shield.setColor(sf::Color(255, 255, 255, 150));
 		}
 	}
+	//เซ็ต useShield ให้เป็น F
 	if (shieldTimer <= 0)
 	{
 		useShield = false;
@@ -120,6 +125,7 @@ void Game::Update(float deltaTime)
 		for (int m = 0; m < item.size(); m++)
 		{
 			item[m].Update();
+			//เช็คการเก็บไอเทม shield
 			if (item[m].getGlobalBound().intersects(player[i].getGlobalBound()) && item[m].getType() == 1)
 			{
 				shieldTimer = 600;
@@ -127,7 +133,14 @@ void Game::Update(float deltaTime)
 				item.erase(item.begin() + m);
 				
 			}
+			//เช็คการเก็บไอเทม Heal
+			else if (item[m].getGlobalBound().intersects(player[i].getGlobalBound()) && item[m].getType() == 2)
+			{
+				player[i].setHp(40);
+				item.erase(item.begin() + m);
+			}
 		}
+		//เมื่อมีการเก็บไอเทม shield
 		if (useShield)
 		{
 			this->shield.setPosition(player[i].getPosition().x - 25.f, player[i].getPosition().y - 30.f);
@@ -136,8 +149,8 @@ void Game::Update(float deltaTime)
 		}
 		for (size_t j = 0; j < this->enemies.size(); j++)
 		{
-			//เมื่ออุกบาทออกเกม
 			this->enemies[j].Update(deltaTime);
+			//เมื่ออุกบาทออกจากหน้าจอ
 			if (enemies[j].getPosition().x <= -500 || enemies[j].getPosition().x >= 1920 + 500 ||
 				enemies[j].getPosition().y <= -500 || enemies[j].getPosition().y >= 1080 + 500)
 			{
@@ -163,6 +176,7 @@ void Game::Update(float deltaTime)
 				{
 					if (player[i].getInvincibility() <= 0) 
 					{
+						player[i].setHp(- 40);
 						player[i].setInvincibility(300);
 						if (enemies[j].getCurrentSize() > 0) 
 						{
@@ -180,6 +194,7 @@ void Game::Update(float deltaTime)
 		for (size_t k = 0; k < player[i].getBullets().size(); k++)
 		{
 			player[i].getBullets()[k].Update();
+			//เมื่อกระสุนออกจากหน้าจอ
 			if (player[i].getBullets()[k].getPosition().x <= 0 || player[i].getBullets()[k].getPosition().x >= 1920 || player[i].getBullets()[k].getPosition().y >= 1080 || player[i].getBullets()[k].getPosition().y <= 0)
 			{
 				player[i].getBullets().erase(player[i].getBullets().begin() + k);
@@ -190,7 +205,7 @@ void Game::Update(float deltaTime)
 				// เมื่ออุกกาบาทชนกระสุน
 				if (player[i].getBullets()[k].getGlobalBound().intersects(enemies[l].getGlobalBound()))
 				{
-					int rate = randrange(6,6);
+					int rate = randrange(1,10);
 					//แตกตัว
 					if (enemies[l].getCurrentSize() > 0) {
 						for (int i = 0; i < randrange(2, 3); i++) {
@@ -200,7 +215,7 @@ void Game::Update(float deltaTime)
 					//สุ่มดรอปไอเทมพิเศษ
 					if (enemies[l].getCurrentSize() == 1)
 					{
-						if (rate == 6)
+						if (rate == 1)
 						{
 							Game::spawnItem(Vector2f(enemies[l].getPosition().x, enemies[l].getPosition().y));
 						}
@@ -217,6 +232,7 @@ void Game::Update(float deltaTime)
 	for (size_t i = 0; i < item.size(); i++)
 	{
 		item[i].Update();
+		//ลบไอเทมเมื่อหมดเวลา
 		if (item[i].getDelay() == 0)
 		{
 			item.erase(item.begin() + i);
