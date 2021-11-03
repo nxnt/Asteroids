@@ -24,6 +24,7 @@ Player::Player(Texture* texture, Vector2f position,Texture* bulletTexture)
 	this->shootTimerMax = 25.f;
 	this->shootTimer = this->shootTimerMax;
 	this->inv = 0;
+	this->bulletLevel = 1;
 }
 
 Player::~Player()
@@ -50,6 +51,25 @@ int Player::getInvincibility()  {
 
 void Player::setInvincibility(int time) {
 	this->inv = time;
+}
+
+int Player::getBulletLevel()  {
+	return this->bulletLevel;
+}
+
+void Player::setBulletLevel(int bulletLevel) {
+	if (bulletLevel == 0)
+	{
+		this->bulletLevel = 1;
+	}
+	else
+	{
+		this->bulletLevel += bulletLevel;
+	}
+	if (this->bulletLevel >= 3)
+	{
+		this->bulletLevel = 3;
+	}
 }
 
 void Player::Movement(float deltaTime)
@@ -84,44 +104,93 @@ void Player::Shoot()
 {
 	if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer >= shootTimerMax)
 	{
-		Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation()));
-		this->bullets.push_back
-		(
-			Bullet
+		if (this->bulletLevel == 1)
+		{
+			Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation()));
+			this->bullets.push_back
 			(
-				this->bulletTexture, 
-				30, 
-				triangle.getPosition(), 
-				bulletDir,
-				triangle.getRotation()
-			)
-		);
-		bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 10));
-		this->bullets.push_back
-		(
-			Bullet
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+		}
+		else if (this->bulletLevel == 2)
+		{
+			for (size_t i = 1; i <= bulletLevel / 2; i++)
+			{
+				Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + i * 5));
+				this->bullets.push_back
+				(
+					Bullet
+					(
+						this->bulletTexture,
+						30,
+						triangle.getPosition(),
+						bulletDir,
+						triangle.getRotation()
+					)
+				);
+				bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - i * 5));
+				this->bullets.push_back
+				(
+					Bullet
+					(
+						this->bulletTexture,
+						30,
+						triangle.getPosition(),
+						bulletDir,
+						triangle.getRotation()
+					)
+				);
+			}
+		}
+		else if (this->bulletLevel == 3)
+		{
+			Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation()));
+			this->bullets.push_back
 			(
-				this->bulletTexture,
-				30,
-				triangle.getPosition(),
-				bulletDir,
-				triangle.getRotation()
-			)
-		);
-		bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 10));
-		this->bullets.push_back
-		(
-			Bullet
-			(
-				this->bulletTexture,
-				30,
-				triangle.getPosition(),
-				bulletDir,
-				triangle.getRotation()
-			)
-		);
-
-		
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+			for (size_t i = 1; i <= bulletLevel / 2; i++)
+			{
+				bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + i * 5));
+				this->bullets.push_back
+				(
+					Bullet
+					(
+						this->bulletTexture,
+						30,
+						triangle.getPosition(),
+						bulletDir,
+						triangle.getRotation()
+					)
+				);
+				bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - i * 5));
+				this->bullets.push_back
+				(
+					Bullet
+					(
+						this->bulletTexture,
+						30,
+						triangle.getPosition(),
+						bulletDir,
+						triangle.getRotation()
+					)
+				);
+			}
+		}
 		shootTimer = 0;
 	}
 }

@@ -22,7 +22,7 @@ private:
 	int inv;
 	int hp;
 	int maxHp;
-	int level;
+	int bulletLevel;
 
 public:
 	Player(Texture* texture, Vector2f position, Texture* bulletTexture);
@@ -34,6 +34,8 @@ public:
 
 	int getInvincibility();
 	void setInvincibility(int time);
+	int getBulletLevel();
+	void setBulletLevel(int bulletLevel);
 	void setHp(int hp);
 
 	inline vector<Bullet>& getBullets() { return this->bullets; }

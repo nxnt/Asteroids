@@ -18,13 +18,18 @@ private:
 	Texture shieldTexture;
 	Texture shield1Texture;
 	Texture healTexture;
+	Texture upgradeBulletTexture;
 	Font font;
 	Sprite background;
 	Sprite shield;
 	bool useShield = false;
+	bool useUpgradeBullet = false;
 	float enemySpawnTimerMax;
 	float enemySpawnTimer;
 	int  shieldTimer;
+	int  upgradeBulletTimer;
+	int  bulletLevel;
+	int  resetBulletLevel;
 	int hp;
 	
 public:

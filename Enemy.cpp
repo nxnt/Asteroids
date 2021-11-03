@@ -28,10 +28,6 @@ void Enemy::setEnemyHp(int hp)
 	{
 		this->enemyHp = 0;
 	}
-	if (this->enemyHp >= enemyMaxHp)
-	{
-		this->enemyHp = enemyMaxHp;
-	}
 }
 
 int Enemy::getEnemyHp()

@@ -9,6 +9,7 @@ Game::Game(RenderWindow* window)
 	this->backgroundTexture.loadFromFile("Texture/Background/background.jpg");
 	this->shieldTexture.loadFromFile("Texture/Item/shield.png");
 	this->shield1Texture.loadFromFile("Texture/Item/shield1.png");
+	this->upgradeBulletTexture.loadFromFile("Texture/Item/upgradeBullet.png");
 	this->healTexture.loadFromFile("Texture/Item/heal.png");
 	this->font.loadFromFile("Font/SpaceMission-rgyw9.otf");
 	this->shield.setTexture(this->shieldTexture);
@@ -24,6 +25,9 @@ Game::Game(RenderWindow* window)
 	this->enemySpawnTimerMax = 3.f;
 	this->enemySpawnTimer = enemySpawnTimerMax;
 	this->shieldTimer = -1;
+	this->upgradeBulletTimer = -1;
+	this->bulletLevel = 1;
+	this->resetBulletLevel = -1;
 	this->hp = 100;
 	background.setTexture(backgroundTexture);
 }
@@ -35,7 +39,7 @@ Game::~Game()
 
 void Game::spawnItem(Vector2f position)
 {
-	int random = randrange(1,2);
+	int random = randrange(3,3);
 	if (random == 1)
 	{
 		item.push_back
@@ -59,6 +63,19 @@ void Game::spawnItem(Vector2f position)
 				position,
 				600,
 				2
+			)
+		);
+	}
+	if (random == 3)
+	{
+		item.push_back
+		(
+			Item
+			(
+				&this->upgradeBulletTexture,
+				position,
+				600,
+				3
 			)
 		);
 	}
@@ -122,6 +139,14 @@ void Game::Update(float deltaTime)
 	{
 		useShield = false;
 	}
+	if (upgradeBulletTimer > 0)
+	{
+		upgradeBulletTimer--;
+	}
+	if (upgradeBulletTimer <= 0)
+	{
+		player[0].setBulletLevel(0);
+	}
 	for (size_t i = 0; i < this->player.size(); i++)
 	{
 		this->player[i].Update(deltaTime);
@@ -142,13 +167,19 @@ void Game::Update(float deltaTime)
 				player[i].setHp(40);
 				item.erase(item.begin() + m);
 			}
+			//เช็คการเก็บไอเทม UpBullet
+			else if (item[m].getGlobalBound().intersects(player[i].getGlobalBound()) && item[m].getType() == 3)
+			{
+				upgradeBulletTimer = 1000;
+				player[i].setBulletLevel(bulletLevel);
+				item.erase(item.begin() + m);
+			}
 		}
 		//เมื่อมีการเก็บไอเทม shield
 		if (useShield)
 		{
 			this->shield.setPosition(player[i].getPosition().x - 25.f, player[i].getPosition().y - 30.f);
 			this->shield.setOrigin(player[i].getOrigin());
-
 		}
 		for (size_t j = 0; j < this->enemies.size(); j++)
 		{
@@ -209,7 +240,7 @@ void Game::Update(float deltaTime)
 					enemies[l].setFlash();
 					if (enemies[l].getEnemyHp() <= 0)
 					{
-						int rate = randrange(1,3);
+						int rate = randrange(1,1);
 						//แตกตัว
 						if (enemies[l].getCurrentSize() > 0) {
 							for (int i = 0; i < randrange(2, 3); i++) {

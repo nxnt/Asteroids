@@ -7,8 +7,10 @@ private:
 	Texture backgroundTexture;
     Sprite menuBgTexture;
 	Font font;
+	Font font1;
 	Text play;
 	Text menu;
+	Text menu1;
 	Text score;
 	Text quit;
 	int state;
@@ -23,6 +25,7 @@ public:
 	void menuUpdate();
 	void menuDraw();
 	void menuUpdateState(int state);
+	void getPlayerName();
 	int  getState();
 };
 
