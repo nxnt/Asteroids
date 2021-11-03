@@ -10,6 +10,7 @@ Game::Game(RenderWindow* window)
 	this->shieldTexture.loadFromFile("Texture/Item/shield.png");
 	this->shield1Texture.loadFromFile("Texture/Item/shield1.png");
 	this->healTexture.loadFromFile("Texture/Item/heal.png");
+	this->font.loadFromFile("Font/SpaceMission-rgyw9.otf");
 	this->shield.setTexture(this->shieldTexture);
 	this->shield.setScale(0.7, 0.7);
 	this->player.push_back(

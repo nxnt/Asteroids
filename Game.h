@@ -18,6 +18,7 @@ private:
 	Texture shieldTexture;
 	Texture shield1Texture;
 	Texture healTexture;
+	Font font;
 	Sprite background;
 	Sprite shield;
 	bool useShield = false;

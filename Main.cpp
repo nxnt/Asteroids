@@ -1,13 +1,15 @@
 #include "Game.h"
-
+#include "Menu.h"
 int main()
 {
     srand(time(NULL));
     RenderWindow window(VideoMode(1920, 1080), "Asteroids", Style::Fullscreen | Style::Close);
     window.setVerticalSyncEnabled(true);
     Game game(&window);
+    Menu menu(&window);
     float deltaTime = 0.f;
     Clock clock;
+    int action;
     while (window.isOpen())
     {
         deltaTime = clock.restart().asSeconds();
@@ -19,8 +21,24 @@ int main()
             if (ev.type == Event::Closed)
                 window.close();
         }
-        game.Update(deltaTime);
-        game.Draw();
+        action = menu.getState();
+        switch (action)
+        {
+        case 0 : 
+            menu.menuUpdate();
+            menu.menuDraw();
+            break;
+        case 1:
+            game.Update(deltaTime);
+            game.Draw();
+            break;
+        case 3:
+            window.close();
+        default:
+            break;
+        }
+        
+        
     }
     return 0;
 }
