@@ -259,7 +259,7 @@ void Game::Update(float deltaTime)
 					}
 					else
 					{
-						enemies[l].setEnemyHp(-25);
+						enemies[l].setEnemyHp(-50);
 					}
 					player[i].getBullets().erase(player[i].getBullets().begin() + k);
 					break;
