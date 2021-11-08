@@ -4,14 +4,17 @@ Menu::Menu(RenderWindow* window)
 {
 	this->window = window;
 	this->backgroundTexture.loadFromFile("Texture/Background/menuBackground1.png");
+	this->background1Texture.loadFromFile("Texture/Background/background.jpg");
 	this->font.loadFromFile("Font/Zebulon.ttf");
 	this->font1.loadFromFile("Font/Spantaran.ttf");
 	this->menuBgTexture.setTexture(this->backgroundTexture);
+	this->menuBg1Texture.setTexture(this->background1Texture);
 	this->menu.setFont(font);
 	this->menu1.setFont(font);
 	this->play.setFont(font1);
 	this->score.setFont(font1);
 	this->quit.setFont(font1);
+	this->enter.setFont(font1);
 
 	this->menu.setString("Asteroids");
 	this->menu.setCharacterSize(100);
@@ -40,7 +43,18 @@ Menu::Menu(RenderWindow* window)
 	this->quit.setCharacterSize(60);
 	this->quit.setOrigin(this->quit.getLocalBounds().width / 2, this->quit.getLocalBounds().height / 2);
 	this->quit.setPosition(Vector2f(960,700));
-	
+
+	this->enter.setString("Enter");
+	this->enter.setCharacterSize(60);
+	this->enter.setOrigin(this->enter.getLocalBounds().width / 2, this->enter.getLocalBounds().height / 2);
+	this->enter.setPosition(Vector2f(960, 700));
+
+	this->enterNameMenu.setOrigin(this->enterNameMenu.getLocalBounds().height / 2, this->enterNameMenu.getLocalBounds().width / 2);
+	this->enterNameMenu.setPosition(Vector2f(960,600));
+	this->enterNameMenu.setSize(Vector2f(650.f, 350.f));
+	this->enterNameMenu.setOutlineThickness(10.f);
+	this->enterNameMenu.setFillColor(Color(0, 0, 0, 200));
+	this->enterNameMenu.setOutlineColor(Color(255, 255, 255, 255));
 }
 
 Menu::~Menu()
@@ -51,12 +65,24 @@ Menu::~Menu()
 void Menu::menuDraw()
 {
 	this->window->clear();
-	this->window->draw(menuBgTexture);
-	this->window->draw(menu1);
-	this->window->draw(menu);
-	this->window->draw(play);
-	this->window->draw(score);
-	this->window->draw(quit);
+	if (getState() == 0)
+	{
+		this->window->draw(menuBgTexture);
+		this->window->draw(menu1);
+		this->window->draw(menu);
+		this->window->draw(play);
+		this->window->draw(score);
+		this->window->draw(quit);
+	}
+	else if (getState() == 1)
+	{
+		this->window->clear();
+		this->window->draw(menuBg1Texture);
+		this->window->draw(menu1);
+		this->window->draw(menu);
+		this->window->draw(enterNameMenu);
+		this->window->draw(enter);
+	}
 	this->window->display();
 }
 
@@ -67,7 +93,7 @@ void Menu::menuUpdateState(int state)
 
 void Menu::getPlayerName()
 {
-
+	
 }
 
 int Menu::getState()
@@ -118,5 +144,19 @@ void Menu::menuUpdate()
 	{
 		this->quit.setScale(1, 1);
 		this->quit.setFillColor(Color(128, 255, 0));
+	}
+	if (enter.getGlobalBounds().contains(Vector2f(Mouse::getPosition())))
+	{
+		this->enter.setScale(1.1,1.1);
+		this->enter.setFillColor(Color(255,0,0));
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			menuUpdateState(2);
+		}
+	}
+	else
+	{
+		this->enter.setScale(1, 1);
+		this->enter.setFillColor(Color(128, 255, 0));
 	}
 }

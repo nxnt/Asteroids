@@ -29,6 +29,10 @@ int main()
             menu.menuDraw();
             break;
         case 1:
+            menu.menuUpdate();
+            menu.menuDraw();
+            break;
+        case 2:
             game.Update(deltaTime);
             game.Draw();
             break;
