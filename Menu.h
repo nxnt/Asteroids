@@ -9,14 +9,17 @@ private:
     Sprite menuBgTexture;
     Sprite menuBg1Texture;
 	RectangleShape enterNameMenu;
+	RectangleShape enterName1Menu;
 	Font font;
 	Font font1;
 	Text play;
-	Text menu;
-	Text menu1;
+	Text logo;
+	Text logo1;
 	Text score;
+	Text myName;
 	Text quit;
 	Text enter;
+	Text mainMenu;
 	int state;
 	//menu 0
 	//play 1

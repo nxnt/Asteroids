@@ -9,25 +9,27 @@ Menu::Menu(RenderWindow* window)
 	this->font1.loadFromFile("Font/Spantaran.ttf");
 	this->menuBgTexture.setTexture(this->backgroundTexture);
 	this->menuBg1Texture.setTexture(this->background1Texture);
-	this->menu.setFont(font);
-	this->menu1.setFont(font);
+	this->logo.setFont(font);
+	this->logo1.setFont(font);
 	this->play.setFont(font1);
 	this->score.setFont(font1);
 	this->quit.setFont(font1);
+	this->myName.setFont(font1);
 	this->enter.setFont(font1);
+	this->mainMenu.setFont(font1);
 
-	this->menu.setString("Asteroids");
-	this->menu.setCharacterSize(100);
-	this->menu.setFillColor(Color(0,255, 255));
-	this->menu.setOrigin(this->menu.getLocalBounds().width / 2, this->menu.getLocalBounds().height / 2);
-	this->menu.setPosition(Vector2f (960, 300));
+	this->logo.setString("Asteroids");
+	this->logo.setCharacterSize(100);
+	this->logo.setFillColor(Color(0,255, 255));
+	this->logo.setOrigin(this->logo.getLocalBounds().width / 2, this->logo.getLocalBounds().height / 2);
+	this->logo.setPosition(Vector2f (960, 300));
 
-	this->menu1.setString("Asteroids");
-	this->menu1.setCharacterSize(100);
-	this->menu1.setScale(1.02, 1.12);
-	this->menu1.setFillColor(Color(128, 0, 255));
-	this->menu1.setOrigin(this->menu1.getLocalBounds().width / 2, this->menu1.getLocalBounds().height / 2);
-	this->menu1.setPosition(Vector2f (959, 300));
+	this->logo1.setString("Asteroids");
+	this->logo1.setCharacterSize(100);
+	this->logo1.setScale(1.02, 1.12);
+	this->logo1.setFillColor(Color(128, 0, 255));
+	this->logo1.setOrigin(this->logo1.getLocalBounds().width / 2, this->logo1.getLocalBounds().height / 2);
+	this->logo1.setPosition(Vector2f (959, 300));
 
 	this->play.setString("PLAY");
 	this->play.setCharacterSize(60);
@@ -44,17 +46,31 @@ Menu::Menu(RenderWindow* window)
 	this->quit.setOrigin(this->quit.getLocalBounds().width / 2, this->quit.getLocalBounds().height / 2);
 	this->quit.setPosition(Vector2f(960,700));
 
-	this->enter.setString("Enter");
-	this->enter.setCharacterSize(60);
-	this->enter.setOrigin(this->enter.getLocalBounds().width / 2, this->enter.getLocalBounds().height / 2);
-	this->enter.setPosition(Vector2f(960, 700));
+	this->myName.setString("My Name is");
+	this->myName.setCharacterSize(60);
+	this->myName.setFillColor(Color(255,255,255));
+	this->myName.setOrigin(this->myName.getLocalBounds().width / 2, this->myName.getLocalBounds().height / 2);
+	this->myName.setPosition(Vector2f(970,450));
 
-	this->enterNameMenu.setOrigin(this->enterNameMenu.getLocalBounds().height / 2, this->enterNameMenu.getLocalBounds().width / 2);
-	this->enterNameMenu.setPosition(Vector2f(960,600));
+	this->mainMenu.setString("Main Menu");
+	this->mainMenu.setCharacterSize(48);
+	this->mainMenu.setOrigin(this->mainMenu.getLocalBounds().width / 2, this->mainMenu.getLocalBounds().height / 2);
+	this->mainMenu.setPosition(Vector2f(820,715));
+
+	this->enter.setString("Enter");
+	this->enter.setCharacterSize(48);
+	this->enter.setOrigin(this->enter.getLocalBounds().width / 2, this->enter.getLocalBounds().height / 2);
+	this->enter.setPosition(Vector2f(1160, 715));
+
 	this->enterNameMenu.setSize(Vector2f(650.f, 350.f));
-	this->enterNameMenu.setOutlineThickness(10.f);
 	this->enterNameMenu.setFillColor(Color(0, 0, 0, 200));
-	this->enterNameMenu.setOutlineColor(Color(255, 255, 255, 255));
+	this->enterNameMenu.setPosition(Vector2f(970,600));
+	this->enterNameMenu.setOrigin(this->enterNameMenu.getLocalBounds().width / 2, this->enterNameMenu.getLocalBounds().height / 2);
+
+	this->enterName1Menu.setSize(Vector2f(400.f, 50.f));
+	this->enterName1Menu.setFillColor(Color(255, 255, 255, 100));
+	this->enterName1Menu.setPosition(Vector2f(970,600));
+	this->enterName1Menu.setOrigin(this->enterName1Menu.getLocalBounds().width / 2, this->enterName1Menu.getLocalBounds().height / 2);
 }
 
 Menu::~Menu()
@@ -68,8 +84,8 @@ void Menu::menuDraw()
 	if (getState() == 0)
 	{
 		this->window->draw(menuBgTexture);
-		this->window->draw(menu1);
-		this->window->draw(menu);
+		this->window->draw(logo1);
+		this->window->draw(logo);
 		this->window->draw(play);
 		this->window->draw(score);
 		this->window->draw(quit);
@@ -78,9 +94,12 @@ void Menu::menuDraw()
 	{
 		this->window->clear();
 		this->window->draw(menuBg1Texture);
-		this->window->draw(menu1);
-		this->window->draw(menu);
+		this->window->draw(logo1);
+		this->window->draw(logo);
 		this->window->draw(enterNameMenu);
+		this->window->draw(enterName1Menu);
+		this->window->draw(myName);
+		this->window->draw(mainMenu);
 		this->window->draw(enter);
 	}
 	this->window->display();
@@ -158,5 +177,19 @@ void Menu::menuUpdate()
 	{
 		this->enter.setScale(1, 1);
 		this->enter.setFillColor(Color(128, 255, 0));
+	}
+	if (mainMenu.getGlobalBounds().contains(Vector2f(Mouse::getPosition())))
+	{
+		this->mainMenu.setScale(1.1,1.1);
+		this->mainMenu.setFillColor(Color(255,0,0));
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			menuUpdateState(0);
+		}
+	}
+	else
+	{
+		this->mainMenu.setScale(1, 1);
+		this->mainMenu.setFillColor(Color(128, 255, 0));
 	}
 }
