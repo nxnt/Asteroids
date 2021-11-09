@@ -1,10 +1,13 @@
 #include "Bullet.h"
 
-Bullet::Bullet(Texture* texture, float speed, Vector2f position, Vector2f dir, float rotate)
+Bullet::Bullet(Texture* texture, float speed, Vector2f position, Vector2f dir, float rotate, float dist)
 {
 	this->texture = texture;
 	this->sprite.setTexture(*this->texture);
-	this->sprite.setPosition(position);
+
+	Vector2f new_dir = normalize(rotateVector(Vector2f(0, 0), rotate));
+
+	this->sprite.setPosition(position + (dist * new_dir));
 	this->dir = dir;
 	this->speed = speed;
 	this->sprite.setRotation(rotate);

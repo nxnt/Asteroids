@@ -17,6 +17,7 @@ Menu::Menu(RenderWindow* window)
 	this->myName.setFont(font1);
 	this->enter.setFont(font1);
 	this->mainMenu.setFont(font1);
+	this->showName.setFont(font1);
 
 	this->logo.setString("Asteroids");
 	this->logo.setCharacterSize(100);
@@ -71,6 +72,10 @@ Menu::Menu(RenderWindow* window)
 	this->enterName1Menu.setFillColor(Color(255, 255, 255, 100));
 	this->enterName1Menu.setPosition(Vector2f(970,600));
 	this->enterName1Menu.setOrigin(this->enterName1Menu.getLocalBounds().width / 2, this->enterName1Menu.getLocalBounds().height / 2);
+
+	this->showName.setCharacterSize(32);
+	this->showName.setFillColor(Color(0, 0, 0, 255));
+	this->showName.setPosition(Vector2f(800, 570));
 }
 
 Menu::~Menu()
@@ -101,6 +106,7 @@ void Menu::menuDraw()
 		this->window->draw(myName);
 		this->window->draw(mainMenu);
 		this->window->draw(enter);
+		this->window->draw(showName);
 	}
 	this->window->display();
 }
@@ -110,9 +116,42 @@ void Menu::menuUpdateState(int state)
 	this->state = state;
 }
 
-void Menu::getPlayerName()
+string Menu::getPlayerName()
 {
-	
+	return name;
+}
+
+void Menu::updatePlayerName(Event& event)
+{
+	this->ev = event;
+	if (this->name == "" && !(this->ev.type == sf::Event::TextEntered))
+	{
+		this->showName.setString("Enter your name");
+		this->type_bounce = 0;
+		this->valid_name = 0;
+	}
+	else
+	{
+		if (event.type == sf::Event::TextEntered)
+		{
+			if (event.text.unicode != 32 && !sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !this->type_bounce)
+			{
+				this->type_bounce = 1;
+				if (event.text.unicode == 8 && name.length() > 0)
+				{
+					name.erase(name.length() - 1);
+				}
+				else if (event.text.unicode < 128 && name.length() < 15 && event.text.unicode != 8)
+				{
+					name += static_cast<char>(event.text.unicode);
+				}
+				showName.setString(name);
+			}
+		}
+		else
+			this->type_bounce = 0;
+		this->valid_name = 1;
+	}
 }
 
 int Menu::getState()

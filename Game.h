@@ -21,6 +21,13 @@ private:
 	Texture upgradeBulletTexture;
 	Sprite background;
 	Sprite shield;
+	Font font;
+	Font font1;
+	Text playerName;
+	Text showScore;
+	Text totalScore;
+	string name;
+	int score;
 	bool useShield = false;
 	bool useUpgradeBullet = false;
 	float enemySpawnTimerMax;
@@ -39,6 +46,7 @@ public:
 
 	void spawnItem(Vector2f position);
 	void spawnAsteroid(Vector2f position, double direction, int size);
+	void setPlayerName(string name);
 	void Update(float deltaTime);
 	void Draw();
 };

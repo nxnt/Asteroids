@@ -11,7 +11,7 @@ private:
 	
 public:
 
-	Bullet(Texture* texture, float speed, Vector2f position, Vector2f dir, float rotate);
+	Bullet(Texture* texture, float speed, Vector2f position, Vector2f dir, float rotate, float dist = 0);
 	void Movement();
 	void Update();
 	void Draw(RenderTarget& target);

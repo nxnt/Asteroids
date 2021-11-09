@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include <cmath>
+#include <sstream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>

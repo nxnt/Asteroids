@@ -11,6 +11,26 @@ Game::Game(RenderWindow* window)
 	this->shield1Texture.loadFromFile("Texture/Item/shield1.png");
 	this->upgradeBulletTexture.loadFromFile("Texture/Item/upgradeBullet.png");
 	this->healTexture.loadFromFile("Texture/Item/heal.png");
+	this->font.loadFromFile("Font/Spantaran.ttf");
+	this->font1.loadFromFile("Font/Zebulon.ttf");
+	this->playerName.setFont(font);
+	this->showScore.setFont(font);
+	this->totalScore.setFont(font1);
+	this->score = 0;
+
+	this->playerName.setCharacterSize(24);
+	this->playerName.setFillColor(Color(0, 255, 255));
+	this->playerName.setPosition(28, 36);
+
+	this->showScore.setString("Score : ");
+	this->showScore.setCharacterSize(36);
+	this->showScore.setFillColor(Color(0, 255, 255));
+	this->showScore.setPosition(1600, 18);
+	
+	this->totalScore.setCharacterSize(30);
+	this->totalScore.setFillColor(Color(0, 255, 255));
+	this->totalScore.setPosition(1730, 25);
+
 	this->shield.setTexture(this->shieldTexture);
 	this->shield.setScale(0.7, 0.7);
 	this->player.push_back(
@@ -95,6 +115,12 @@ void Game::spawnAsteroid(Vector2f position, double direction, int size) {
 			size
 		)
 	);
+}
+
+void Game::setPlayerName(string name)
+{
+	this->name = name;
+	this->playerName.setString(this->name);
 }
 
 void Game::Update(float deltaTime)
@@ -237,8 +263,14 @@ void Game::Update(float deltaTime)
 				if (player[i].getBullets()[k].getGlobalBound().intersects(enemies[l].getGlobalBound()))
 				{
 					enemies[l].setFlash();
+					enemies[l].setEnemyHp(-25);
+
 					if (enemies[l].getEnemyHp() <= 0)
 					{
+						score += 50 * enemies[l].getCurrentSize();
+						std::stringstream strScore;
+						strScore << score;
+						this->totalScore.setString(strScore.str());
 						int rate = randrange(1,1);
 						//แตกตัว
 						if (enemies[l].getCurrentSize() > 0) {
@@ -255,10 +287,6 @@ void Game::Update(float deltaTime)
 							}
 						}
 						enemies.erase(enemies.begin() + l);
-					}
-					else
-					{
-						enemies[l].setEnemyHp(-50);
 					}
 					player[i].getBullets().erase(player[i].getBullets().begin() + k);
 					break;
@@ -298,6 +326,12 @@ void Game::Draw()
 		{
 			this->window->draw(shield);
 		}
+	}
+	this->window->draw(playerName);
+	this->window->draw(showScore);
+	if (score > 0)
+	{
+		this->window->draw(totalScore);
 	}
 	this->window->display();
 }

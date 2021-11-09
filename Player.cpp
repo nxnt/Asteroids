@@ -10,10 +10,12 @@ Player::Player(Texture* texture, Vector2f position,Texture* bulletTexture)
 	this->triangle.setPointCount(3);
 	this->triangle.setTexture(this->texture);
 	this->triangle.setOrigin(this->triangle.getRadius(), this->triangle.getRadius());
-	this->health_white.setPosition(28,48);
-	this->health_white.setFillColor(Color(255,255,255,255));
-	this->health_white.setSize(Vector2f(504.f, 34.f));
-	this->health_red.setPosition(30,50);
+	this->health_white.setPosition(28,68);
+	this->health_white.setSize(Vector2f(504.f, 24.f));
+	this->health_white.setOutlineThickness(2.f);
+	this->health_white.setFillColor(Color(255,255,255,100));
+	this->health_white.setOutlineColor(Color(255, 255, 255,255));
+	this->health_red.setPosition(30,70);
 	this->health_red.setFillColor(Color(255,0,0,255));
 	this->hp = 100;
 	this->maxHp = 100;
@@ -24,7 +26,7 @@ Player::Player(Texture* texture, Vector2f position,Texture* bulletTexture)
 	this->shootTimerMax = 25.f;
 	this->shootTimer = this->shootTimerMax;
 	this->inv = 0;
-	this->bulletLevel = 1;
+	this->bulletLevel = 2;
 }
 
 Player::~Player()
@@ -107,6 +109,7 @@ void Player::Shoot()
 		if (this->bulletLevel == 1)
 		{
 			Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation()));
+
 			this->bullets.push_back
 			(
 				Bullet
@@ -122,6 +125,7 @@ void Player::Shoot()
 		else if (this->bulletLevel == 2)
 		{
 			Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 5));
+
 			this->bullets.push_back
 			(
 				Bullet
@@ -130,7 +134,8 @@ void Player::Shoot()
 					30,
 					triangle.getPosition(),
 					bulletDir,
-					triangle.getRotation()
+					triangle.getRotation(),
+					1000
 				)
 			);
 			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 5));
@@ -142,7 +147,8 @@ void Player::Shoot()
 					30,
 					triangle.getPosition(),
 					bulletDir,
-					triangle.getRotation()
+					triangle.getRotation(),
+					-1000
 				)
 			);
 		}
@@ -220,7 +226,7 @@ void Player::Update(float deltaTime)
 		if(inv % 30 > 15) this->triangle.setFillColor(sf::Color(255, 0, 0, 150)); // à«çµãËéËÒÂä»
 	}
 	float player_hp = ((float)this->hp / (float)this->maxHp) * 500.f;
-	this->health_red.setSize(Vector2f(player_hp, 30.f));
+	this->health_red.setSize(Vector2f(player_hp, 20.f));
 }
 
 void Player::Draw(RenderTarget& target)

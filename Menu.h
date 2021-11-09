@@ -4,6 +4,7 @@ class Menu
 {
 private:
 	RenderWindow* window;
+	Event ev;
 	Texture backgroundTexture;
 	Texture background1Texture;
     Sprite menuBgTexture;
@@ -20,7 +21,11 @@ private:
 	Text quit;
 	Text enter;
 	Text mainMenu;
+	Text showName;
+	string name;
 	int state;
+	bool type_bounce = false;
+	bool valid_name = false;
 	//menu 0
 	//play 1
 	//score 2
@@ -32,7 +37,8 @@ public:
 	void menuUpdate();
 	void menuDraw();
 	void menuUpdateState(int state);
-	void getPlayerName();
+	string getPlayerName();
+	void updatePlayerName(Event& event);
 	int  getState();
 };
 

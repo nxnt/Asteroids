@@ -31,6 +31,8 @@ int main()
         case 1:
             menu.menuUpdate();
             menu.menuDraw();
+            menu.updatePlayerName(ev);
+            game.setPlayerName(menu.getPlayerName());
             break;
         case 2:
             game.Update(deltaTime);
