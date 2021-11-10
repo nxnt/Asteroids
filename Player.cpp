@@ -26,7 +26,7 @@ Player::Player(Texture* texture, Vector2f position,Texture* bulletTexture)
 	this->shootTimerMax = 25.f;
 	this->shootTimer = this->shootTimerMax;
 	this->inv = 0;
-	this->bulletLevel = 2;
+	this->bulletLevel = 1;
 }
 
 Player::~Player()
@@ -124,7 +124,7 @@ void Player::Shoot()
 		}
 		else if (this->bulletLevel == 2)
 		{
-			Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 5));
+			Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 5 ));
 
 			this->bullets.push_back
 			(
@@ -132,23 +132,21 @@ void Player::Shoot()
 				(
 					this->bulletTexture,
 					30,
-					triangle.getPosition(),
+					Vector2f(triangle.getPosition().x, triangle.getPosition().y),
 					bulletDir,
-					triangle.getRotation(),
-					1000
+					triangle.getRotation()
 				)
 			);
-			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 5));
+			bulletDir = normalize(rotateVector(Vector2f( 0, -1), this->triangle.getRotation() - 5));
 			this->bullets.push_back
 			(
 				Bullet
 				(
 					this->bulletTexture,
 					30,
-					triangle.getPosition(),
+					Vector2f(triangle.getPosition().x, triangle.getPosition().y),
 					bulletDir,
-					triangle.getRotation(),
-					-1000
+					triangle.getRotation()
 				)
 			);
 		}

@@ -18,9 +18,9 @@ Game::Game(RenderWindow* window)
 	this->totalScore.setFont(font1);
 	this->score = 0;
 
-	this->playerName.setCharacterSize(24);
+	this->playerName.setCharacterSize(36);
 	this->playerName.setFillColor(Color(0, 255, 255));
-	this->playerName.setPosition(28, 36);
+	this->playerName.setPosition(28, 20);
 
 	this->showScore.setString("Score : ");
 	this->showScore.setCharacterSize(36);
@@ -58,7 +58,7 @@ Game::~Game()
 
 void Game::spawnItem(Vector2f position)
 {
-	int random = randrange(3,3);
+	int random = randrange(1,3);
 	if (random == 1)
 	{
 		item.push_back
@@ -271,7 +271,7 @@ void Game::Update(float deltaTime)
 						std::stringstream strScore;
 						strScore << score;
 						this->totalScore.setString(strScore.str());
-						int rate = randrange(1,1);
+						int rate = randrange(1,3);
 						//แตกตัว
 						if (enemies[l].getCurrentSize() > 0) {
 							for (int i = 0; i < randrange(2, 3); i++) {

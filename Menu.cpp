@@ -69,13 +69,14 @@ Menu::Menu(RenderWindow* window)
 	this->enterNameMenu.setOrigin(this->enterNameMenu.getLocalBounds().width / 2, this->enterNameMenu.getLocalBounds().height / 2);
 
 	this->enterName1Menu.setSize(Vector2f(400.f, 50.f));
+	this->enterName1Menu.setOutlineThickness(2.f);
 	this->enterName1Menu.setFillColor(Color(255, 255, 255, 100));
+	this->enterName1Menu.setOutlineColor(Color(131, 0, 255));
 	this->enterName1Menu.setPosition(Vector2f(970,600));
 	this->enterName1Menu.setOrigin(this->enterName1Menu.getLocalBounds().width / 2, this->enterName1Menu.getLocalBounds().height / 2);
 
 	this->showName.setCharacterSize(32);
 	this->showName.setFillColor(Color(0, 0, 0, 255));
-	this->showName.setPosition(Vector2f(800, 570));
 }
 
 Menu::~Menu()
@@ -127,6 +128,7 @@ void Menu::updatePlayerName(Event& event)
 	if (this->name == "" && !(this->ev.type == sf::Event::TextEntered))
 	{
 		this->showName.setString("Enter your name");
+		this->showName.setPosition(Vector2f(850, 577));
 		this->type_bounce = 0;
 		this->valid_name = 0;
 	}
@@ -145,7 +147,9 @@ void Menu::updatePlayerName(Event& event)
 				{
 					name += static_cast<char>(event.text.unicode);
 				}
-				showName.setString(name);
+				showName.setString(name); 
+				showName.setOrigin(this->showName.getLocalBounds().width / 2, this->showName.getLocalBounds().height / 2);
+				showName.setPosition(Vector2f(975, 587.5));
 			}
 		}
 		else
@@ -224,6 +228,7 @@ void Menu::menuUpdate()
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
 			menuUpdateState(0);
+			this->name = "";
 		}
 	}
 	else
