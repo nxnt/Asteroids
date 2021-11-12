@@ -21,6 +21,7 @@ Item::Item(Texture* texture,Vector2f position,float time, int type)
 	{
 		sprite.setScale(0.065, 0.065);
 	}
+	this->ranD = randrange(0, 360);
 }
 
 Item::~Item()
@@ -37,6 +38,7 @@ void Item::Update()
 		if (time % 30 > 15 && time < 300) this->sprite.setColor(sf::Color(255, 255,255, 150)); // à«çµãËéËÒÂä»
 
 	}
+	moveDirection(&this->position.x, &this->position.y, this->ranD, 1.5);
 }
 
 int Item::getDelay()
@@ -51,6 +53,7 @@ void Item::setDelay(int time)
 
 void Item::Draw(RenderTarget& target)
 {
+	sprite.setPosition(this->position);
 	target.draw(sprite);
 }
 
@@ -59,3 +62,8 @@ int Item::getType()
 	return this->type = type;
 }
 
+void Item::moveDirection(float* x_start, float* y_start, double degree, double speed) {
+
+	*x_start += speed * sin(degree * M_PI / 180);
+	*y_start += speed * cos(degree * M_PI / 180);
+}

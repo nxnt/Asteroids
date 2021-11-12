@@ -9,6 +9,7 @@ private:
 	Sprite sprite;
 	int time;
 	int type;
+	int ranD;
 
 public:
 	Item(Texture* texture, Vector2f position, float time,int type);
@@ -20,5 +21,6 @@ public:
 	inline const Vector2f getPosition()const { return this->sprite.getPosition(); }
 	inline FloatRect getGlobalBound()const { return this->sprite.getGlobalBounds(); }
 	int getType();
+	void moveDirection(float* x_start, float* y_start, double degree, double speed);
 };
 
