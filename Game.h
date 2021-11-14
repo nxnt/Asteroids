@@ -30,6 +30,8 @@ private:
 	int score;
 	bool useShield = false;
 	bool useUpgradeBullet = false;
+	float enemySpawnTimerDefault;
+	float enemySpawnTimerMinimum;
 	float enemySpawnTimerMax;
 	float enemySpawnTimer;
 	int  shieldTimer;
@@ -37,12 +39,17 @@ private:
 	int  bulletLevel;
 	int  resetBulletLevel;
 	int hp;
+
+	Clock game_clock;
+	Time game_time_elapsed;
 	
 public:
 
 	//Constructors / Destructors
 	Game(RenderWindow* window);
 	~Game();
+
+	void resetGame();
 
 	void spawnItem(Vector2f position);
 	void spawnAsteroid(Vector2f position, double direction, int size);

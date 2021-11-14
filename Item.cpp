@@ -38,7 +38,7 @@ void Item::Update()
 		if (time % 30 > 15 && time < 300) this->sprite.setColor(sf::Color(255, 255,255, 150)); // à«çµãËéËÒÂä»
 
 	}
-	moveDirection(&this->position.x, &this->position.y, this->ranD, 1.5);
+	moveDirection(&this->position.x, &this->position.y, this->ranD, 1.25);
 }
 
 int Item::getDelay()

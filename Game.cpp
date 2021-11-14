@@ -13,26 +13,23 @@ Game::Game(RenderWindow* window)
 	this->healTexture.loadFromFile("Texture/Item/heal.png");
 	this->font.loadFromFile("Font/Spantaran.ttf");
 	this->font1.loadFromFile("Font/Zebulon.ttf");
-	this->playerName.setFont(font);
-	this->showScore.setFont(font);
 	this->totalScore.setFont(font1);
-	this->score = 0;
 
+	this->playerName.setFont(font);
 	this->playerName.setCharacterSize(36);
 	this->playerName.setFillColor(Color(0, 255, 255));
-	this->playerName.setPosition(28, 20);
 
+	this->showScore.setFont(font);
 	this->showScore.setString("Score : ");
 	this->showScore.setCharacterSize(36);
 	this->showScore.setFillColor(Color(0, 255, 255));
-	this->showScore.setPosition(1600, 18);
 	
 	this->totalScore.setCharacterSize(30);
 	this->totalScore.setFillColor(Color(0, 255, 255));
-	this->totalScore.setPosition(1730, 25);
-
+	
 	this->shield.setTexture(this->shieldTexture);
 	this->shield.setScale(0.7, 0.7);
+
 	this->player.push_back(
 		Player
 		(
@@ -41,14 +38,30 @@ Game::Game(RenderWindow* window)
 			&this->bulletTexture
 		)
 	);
-	this->enemySpawnTimerMax = 3.f;
-	this->enemySpawnTimer = enemySpawnTimerMax;
+
+	
+	background.setTexture(backgroundTexture);
+
+	this->resetGame();
+}
+
+void Game::resetGame() {
+
+	// รีเซ็ต Clock เพื่อเวลานับใหม่
+	this->playerName.setPosition(28, 20);
+	this->showScore.setPosition(1600, 18);
+	this->totalScore.setPosition(1730, 25);
+	this->score = 0;
+	this->enemySpawnTimerMinimum = 0.5f;
+	this->enemySpawnTimerDefault = 2.0f;
+	this->enemySpawnTimerMax = enemySpawnTimerDefault;
+	this->enemySpawnTimer = enemySpawnTimerDefault;
 	this->shieldTimer = -1;
 	this->upgradeBulletTimer = -1;
 	this->bulletLevel = 1;
 	this->resetBulletLevel = -1;
 	this->hp = 100;
-	background.setTexture(backgroundTexture);
+	this->game_time_elapsed = this->game_clock.restart();
 }
 
 Game::~Game()
@@ -125,6 +138,13 @@ void Game::setPlayerName(string name)
 
 void Game::Update(float deltaTime)
 {
+	//บันทึกเวลาที่ผ่านไปลงในตัวแปร
+	this->game_time_elapsed = this->game_clock.getElapsedTime();
+
+	//ลดดีเลย์ในการเกิดเมื่อเวลาผ่านไปเพื่อเพิ่มความยากของเกม
+	int game_time_second = this->game_time_elapsed.asSeconds();
+	this->enemySpawnTimerMax = this->enemySpawnTimerDefault - min(this->enemySpawnTimerDefault - this->enemySpawnTimerMinimum, (game_time_second / 100.0f));
+
 	//ดีเลย์ในการเกิด
 	if (enemySpawnTimer <= enemySpawnTimerMax)
 	{
