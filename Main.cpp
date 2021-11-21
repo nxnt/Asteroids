@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "Menu.h"
+
 int main()
 {
     srand(time(NULL));
@@ -12,16 +12,19 @@ int main()
     int action;
     while (window.isOpen())
     {
+        window.clear();
         deltaTime = clock.restart().asSeconds();
         Event ev;
         while (window.pollEvent(ev))
         {
-            if (ev.type == Event::KeyPressed && Keyboard::isKeyPressed(Keyboard::Escape))
-                window.close();
-            if (ev.type == Event::Closed)
-                window.close();
+
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Escape) && menu.getState() == 2)
+        {
+            menu.menuUpdateState(3);
         }
         action = menu.getState();
+        cout << action << endl;
         switch (action)
         {
         case 0 : 
@@ -35,16 +38,37 @@ int main()
             game.setPlayerName(menu.getPlayerName());
             break;
         case 2:
+            if (game.gameOver())
+            {
+                menu.menuUpdateState(4);
+            }
             game.Update(deltaTime);
             game.Draw();
             break;
         case 3:
+            game.Draw();
+            menu.menuUpdate();
+            menu.menuDraw();
+            break;
+        case 4:
+            menu.setScore(game.getScore());
+            game.Draw();
+            menu.menuUpdate();
+            menu.menuDraw();
+            break;
+        case 5:
+            menu.resetPlayerName();
+            game.resetGame();
+            menu.menuUpdateState(0);
+            break;
+        case 6:
             window.close();
+            break;
         default:
             break;
         }
-        
-        
+        window.display();
+  
     }
     return 0;
 }

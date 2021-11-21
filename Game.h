@@ -1,6 +1,8 @@
 #pragma once
 #include "Player.h"
 #include "Enemy.h"
+#include "Menu.h"
+#include "ScoreList.h"
 
 class Game
 {
@@ -38,7 +40,6 @@ private:
 	int  upgradeBulletTimer;
 	int  bulletLevel;
 	int  resetBulletLevel;
-	int hp;
 
 	Clock game_clock;
 	Time game_time_elapsed;
@@ -50,10 +51,11 @@ public:
 	~Game();
 
 	void resetGame();
-
+	bool gameOver();
 	void spawnItem(Vector2f position);
 	void spawnAsteroid(Vector2f position, double direction, int size);
 	void setPlayerName(string name);
+	int getScore();
 	void Update(float deltaTime);
 	void Draw();
 };

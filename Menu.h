@@ -11,25 +11,43 @@ private:
     Sprite menuBg1Texture;
 	RectangleShape enterNameMenu;
 	RectangleShape enterName1Menu;
+	RectangleShape pauseMenu;
+	RectangleShape abandonMenu;
 	Font font;
 	Font font1;
 	Text play;
-	Text logo;
-	Text logo1;
-	Text score;
+	Text logoMainMenu;
+	Text logoMainMenu1;
+	Text scoreBoard;
 	Text myName;
 	Text quit;
 	Text enter;
 	Text mainMenu;
 	Text showName;
+	Text resume;
+	Text abandon;
+	Text backToMenu;
+	Text backToMenu1;
+	Text gameOver;
+	Text gameOver1;
+	Text showScore;
+	Text score;
 	string name;
 	int state;
+	int totalscore;
 	bool type_bounce = false;
 	bool valid_name = false;
+	int mouseheld;
+	float mouseheldTime;
+	int transition;
+	float transitionCooldown;
 	//menu 0
-	//play 1
-	//score 2
-	//quit 3
+	// scoreborad 1
+	//enterName 2
+	// play 3
+	//pause 4
+	// abandon 5
+	//quit 6
 	
 public:
 	Menu(RenderWindow* window);
@@ -38,7 +56,9 @@ public:
 	void menuDraw();
 	void menuUpdateState(int state);
 	string getPlayerName();
+	void resetPlayerName();
 	void updatePlayerName(Event& event);
 	int  getState();
+	void  setScore(int score);
 };
 

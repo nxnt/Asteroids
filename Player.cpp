@@ -34,6 +34,16 @@ Player::~Player()
 
 }
 
+void Player::resetPlayer()
+{
+	this->triangle.setPosition(960, 540);
+	this->triangle.rotate(0);
+	this->hp = 100;
+	this->inv = 0;
+	this->triangle.setFillColor(sf::Color(255, 255, 255, 255));
+	triangle.move(0,0);
+} 
+
 void Player::setHp(int hp)
 {
 	this->hp += hp;
@@ -72,6 +82,11 @@ void Player::setBulletLevel(int bulletLevel) {
 	{
 		this->bulletLevel = 3;
 	}
+}
+
+int Player::getHp()
+{
+	return this->hp;
 }
 
 void Player::Movement(float deltaTime)

@@ -31,12 +31,14 @@ public:
 	void Shoot();
 	void Update(float deltaTime);
 	void Draw(RenderTarget& target);
+	void resetPlayer();
 
 	int getInvincibility();
 	void setInvincibility(int time);
 	int getBulletLevel();
 	void setBulletLevel(int bulletLevel);
 	void setHp(int hp);
+	int getHp();
 
 	inline vector<Bullet>& getBullets() { return this->bullets; }
 	inline const Vector2f& getPosition()const { return this->triangle.getPosition(); }

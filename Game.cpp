@@ -9,14 +9,14 @@ Game::Game(RenderWindow* window)
 	this->backgroundTexture.loadFromFile("Texture/Background/background.jpg");
 	this->shieldTexture.loadFromFile("Texture/Item/shield.png");
 	this->shield1Texture.loadFromFile("Texture/Item/shield1.png");
-	this->upgradeBulletTexture.loadFromFile("Texture/Item/upgradeBullet.png");
+	this->upgradeBulletTexture.loadFromFile("Texture/Item/upgradeBullet1.png");
 	this->healTexture.loadFromFile("Texture/Item/heal.png");
 	this->font.loadFromFile("Font/Spantaran.ttf");
 	this->font1.loadFromFile("Font/Zebulon.ttf");
 	this->totalScore.setFont(font1);
 
-	this->playerName.setFont(font);
-	this->playerName.setCharacterSize(36);
+	this->playerName.setFont(font1);
+	this->playerName.setCharacterSize(28);
 	this->playerName.setFillColor(Color(0, 255, 255));
 
 	this->showScore.setFont(font);
@@ -60,8 +60,22 @@ void Game::resetGame() {
 	this->upgradeBulletTimer = -1;
 	this->bulletLevel = 1;
 	this->resetBulletLevel = -1;
-	this->hp = 100;
 	this->game_time_elapsed = this->game_clock.restart();
+	player[0].resetPlayer();
+	enemies.clear();
+	item.clear();
+}
+
+bool Game::gameOver()
+{
+	if (player[0].getHp() == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 Game::~Game()
@@ -134,6 +148,11 @@ void Game::setPlayerName(string name)
 {
 	this->name = name;
 	this->playerName.setString(this->name);
+}
+
+int Game::getScore()
+{
+	return this->score;
 }
 
 void Game::Update(float deltaTime)
@@ -243,7 +262,7 @@ void Game::Update(float deltaTime)
 				{
 					if (player[i].getInvincibility() <= 0) 
 					{
-						player[i].setHp(- 10);
+						player[i].setHp(- 5 * enemies[j].getCurrentSize());
 						enemies[j].setEnemyHp(-25);
 						player[i].setInvincibility(300);
 						if (enemies[j].getCurrentSize() > 0) 
@@ -329,7 +348,6 @@ void Game::Update(float deltaTime)
 
 void Game::Draw()
 {
-	this->window->clear();
 	this->window->draw(background);
 	for (size_t i = 0; i < this->enemies.size(); i++)
 	{
@@ -353,5 +371,4 @@ void Game::Draw()
 	{
 		this->window->draw(totalScore);
 	}
-	this->window->display();
 }

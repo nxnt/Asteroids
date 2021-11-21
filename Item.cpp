@@ -19,7 +19,7 @@ Item::Item(Texture* texture,Vector2f position,float time, int type)
 	}
 	else if (this->type == 3)
 	{
-		sprite.setScale(0.065, 0.065);
+		sprite.setScale(0.15, 0.15);
 	}
 	this->ranD = randrange(0, 360);
 }
