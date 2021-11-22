@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Menu.h"
-#include "ScoreList.h"
 
 class Game
 {
@@ -43,15 +42,16 @@ private:
 
 	Clock game_clock;
 	Time game_time_elapsed;
+	ScoreList* score_list;
 	
 public:
 
 	//Constructors / Destructors
-	Game(RenderWindow* window);
+	Game(RenderWindow* window, ScoreList* score_list);
 	~Game();
 
 	void resetGame();
-	bool gameOver();
+	bool gameOver(bool gameStatus);
 	void spawnItem(Vector2f position);
 	void spawnAsteroid(Vector2f position, double direction, int size);
 	void setPlayerName(string name);

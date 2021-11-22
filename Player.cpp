@@ -69,7 +69,8 @@ int Player::getBulletLevel()  {
 	return this->bulletLevel;
 }
 
-void Player::setBulletLevel(int bulletLevel) {
+void Player::setBulletLevel(int bulletLevel) 
+{
 	if (bulletLevel == 0)
 	{
 		this->bulletLevel = 1;
@@ -78,9 +79,9 @@ void Player::setBulletLevel(int bulletLevel) {
 	{
 		this->bulletLevel += bulletLevel;
 	}
-	if (this->bulletLevel >= 3)
+	if (this->bulletLevel >= 5)
 	{
-		this->bulletLevel = 3;
+		this->bulletLevel = 5;
 	}
 }
 
@@ -192,6 +193,120 @@ void Player::Shoot()
 				)
 			);
 			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 5));
+			this->bullets.push_back
+			(
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+		}
+		else if (this->bulletLevel == 4)
+		{
+		Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 5));
+		this->bullets.push_back
+		(
+			Bullet
+			(
+				this->bulletTexture,
+				30,
+				triangle.getPosition(),
+				bulletDir,
+				triangle.getRotation()
+			)
+		);
+			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 5));
+			this->bullets.push_back
+			(
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 10));
+			this->bullets.push_back
+			(
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 10));
+			this->bullets.push_back
+			(
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+		}
+		else if (this->bulletLevel == 5)
+		{
+		Vector2f bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation()));
+		this->bullets.push_back
+		(
+			Bullet
+			(
+				this->bulletTexture,
+				30,
+				triangle.getPosition(),
+				bulletDir,
+				triangle.getRotation()
+			)
+		);
+			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 5));
+			this->bullets.push_back
+			(
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 5));
+			this->bullets.push_back
+			(
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() + 10));
+			this->bullets.push_back
+			(
+				Bullet
+				(
+					this->bulletTexture,
+					30,
+					triangle.getPosition(),
+					bulletDir,
+					triangle.getRotation()
+				)
+			);
+			bulletDir = normalize(rotateVector(Vector2f(0, -1), this->triangle.getRotation() - 10));
 			this->bullets.push_back
 			(
 				Bullet

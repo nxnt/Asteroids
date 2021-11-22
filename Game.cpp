@@ -1,8 +1,9 @@
 #include "Game.h"
 
-Game::Game(RenderWindow* window)
+Game::Game(RenderWindow* window, ScoreList* score_list)
 {
 	this->window = window;
+	this->score_list = score_list;
 	this->playerTexture.loadFromFile("Texture/Player/sprite.png");
 	this->bulletTexture.loadFromFile("Texture/Player/Bullet/bullet.png");
 	this->enemyTexture.loadFromFile("Texture/Enemy/asteroid1.png");
@@ -45,6 +46,11 @@ Game::Game(RenderWindow* window)
 	this->resetGame();
 }
 
+Game::~Game()
+{
+
+}
+
 void Game::resetGame() {
 
 	// รีเซ็ต Clock เพื่อเวลานับใหม่
@@ -64,95 +70,6 @@ void Game::resetGame() {
 	player[0].resetPlayer();
 	enemies.clear();
 	item.clear();
-}
-
-bool Game::gameOver()
-{
-	if (player[0].getHp() == 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-Game::~Game()
-{
-
-}
-
-void Game::spawnItem(Vector2f position)
-{
-	int random = randrange(1,3);
-	if (random == 1)
-	{
-		item.push_back
-		(
-			Item
-			(
-				&this->shield1Texture,
-				position,
-				600,
-				1
-			)
-		);
-	}
-	if (random == 2)
-	{
-		item.push_back
-		(
-			Item
-			(
-				&this->healTexture,
-				position,
-				600,
-				2
-			)
-		);
-	}
-	if (random == 3)
-	{
-		item.push_back
-		(
-			Item
-			(
-				&this->upgradeBulletTexture,
-				position,
-				600,
-				3
-			)
-		);
-	}
-	
-}
-
-void Game::spawnAsteroid(Vector2f position, double direction, int size) {
-
-	enemies.push_back
-	(
-		Enemy
-		(
-			&this->enemyTexture,
-			player[0].getPosition(),
-			direction,
-			50.f,
-			position,
-			size
-		)
-	);
-}
-
-void Game::setPlayerName(string name)
-{
-	this->name = name;
-	this->playerName.setString(this->name);
-}
-
-int Game::getScore()
-{
-	return this->score;
 }
 
 void Game::Update(float deltaTime)
@@ -307,10 +224,8 @@ void Game::Update(float deltaTime)
 					if (enemies[l].getEnemyHp() <= 0)
 					{
 						score += 50 * enemies[l].getCurrentSize();
-						std::stringstream strScore;
-						strScore << score;
-						this->totalScore.setString(strScore.str());
-						int rate = randrange(1,3);
+						this->totalScore.setString(std::to_string(score));
+						//int rate = randrange(1,4);
 						//แตกตัว
 						if (enemies[l].getCurrentSize() > 0) {
 							for (int i = 0; i < randrange(2, 3); i++) {
@@ -320,10 +235,10 @@ void Game::Update(float deltaTime)
 						//สุ่มดรอปไอเทมพิเศษ
 						if (enemies[l].getCurrentSize() == 1)
 						{
-							if (rate == 1)
-							{
+							//if (rate == 1)
+							//{
 								Game::spawnItem(Vector2f(enemies[l].getPosition().x, enemies[l].getPosition().y));
-							}
+							//}
 						}
 						enemies.erase(enemies.begin() + l);
 					}
@@ -372,3 +287,90 @@ void Game::Draw()
 		this->window->draw(totalScore);
 	}
 }
+
+bool Game::gameOver(bool gameStatus)
+{
+	if (player[0].getHp() == 0 || gameStatus)
+	{
+		this->score_list->addEntry(this->name, this->score);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Game::spawnItem(Vector2f position)
+{
+	int random = randrange(1,30);
+	if (random == 4 || random == 7)
+	{
+		item.push_back
+		(
+			Item
+			(
+				&this->shield1Texture,
+				position,
+				600,
+				1
+			)
+		);
+	}
+	if (random == 2)
+	{
+		item.push_back
+		(
+			Item
+			(
+				&this->healTexture,
+				position,
+				600,
+				2
+			)
+		);
+	}
+	if (random == 1 || random == 3 || random == 9)
+	{
+		item.push_back
+		(
+			Item
+			(
+				&this->upgradeBulletTexture,
+				position,
+				600,
+				3
+			)
+		);
+	}
+	
+}
+
+void Game::spawnAsteroid(Vector2f position, double direction, int size) {
+
+	enemies.push_back
+	(
+		Enemy
+		(
+			&this->enemyTexture,
+			player[0].getPosition(),
+			direction,
+			50.f,
+			position,
+			size
+		)
+	);
+}
+
+void Game::setPlayerName(string name)
+{
+	this->name = name;
+	this->playerName.setString(this->name);
+}
+
+int Game::getScore()
+{
+	return this->score;
+}
+
+

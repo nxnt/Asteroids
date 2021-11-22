@@ -5,8 +5,10 @@ int main()
     srand(time(NULL));
     RenderWindow window(VideoMode(1920, 1080), "Asteroids", Style::Fullscreen | Style::Close);
     window.setVerticalSyncEnabled(true);
-    Game game(&window);
-    Menu menu(&window);
+    ScoreList score_list("highscore.txt");
+    score_list.loadFile();
+    Game game(&window, &score_list);
+    Menu menu(&window, &score_list);
     float deltaTime = 0.f;
     Clock clock;
     int action;
@@ -19,49 +21,56 @@ int main()
         {
 
         }
-        if (Keyboard::isKeyPressed(Keyboard::Escape) && menu.getState() == 2)
+        if (Keyboard::isKeyPressed(Keyboard::Escape) && menu.getState() == 6 )
         {
             menu.menuUpdateState(3);
         }
         action = menu.getState();
-        cout << action << endl;
         switch (action)
         {
-        case 0 : 
+        case 0 :  //main menu
             menu.menuUpdate();
             menu.menuDraw();
             break;
-        case 1:
+        case 1:   //entr name
             menu.menuUpdate();
             menu.menuDraw();
             menu.updatePlayerName(ev);
             game.setPlayerName(menu.getPlayerName());
             break;
-        case 2:
-            if (game.gameOver())
+        case 2:  //scoreboard
+            menu.menuUpdate();
+            menu.menuDraw();
+            break;
+        case 3:  //pause menu
+            game.Draw();
+            if (game.gameOver(menu.getGameStatus()))
+            {
+                menu.menuUpdateState(4);
+            }
+            menu.menuUpdate();
+            menu.menuDraw();
+            break;
+        case 4:  //game over menu
+            menu.setScore(game.getScore());
+            game.Draw();
+            menu.menuUpdate();
+            menu.menuDraw();
+            break;
+        case 5: //reset gane
+            menu.resetPlayerName();
+            game.resetGame();
+            menu.menuUpdateState(0);
+            break;
+        case 6: //start game
+            if (game.gameOver(NULL))
             {
                 menu.menuUpdateState(4);
             }
             game.Update(deltaTime);
             game.Draw();
             break;
-        case 3:
-            game.Draw();
-            menu.menuUpdate();
-            menu.menuDraw();
-            break;
-        case 4:
-            menu.setScore(game.getScore());
-            game.Draw();
-            menu.menuUpdate();
-            menu.menuDraw();
-            break;
-        case 5:
-            menu.resetPlayerName();
-            game.resetGame();
-            menu.menuUpdateState(0);
-            break;
-        case 6:
+        case 7: //close game
             window.close();
             break;
         default:
@@ -70,5 +79,6 @@ int main()
         window.display();
   
     }
+    score_list.saveFile();
     return 0;
 }
