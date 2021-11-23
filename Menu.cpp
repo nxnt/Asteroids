@@ -10,6 +10,7 @@ Menu::Menu(RenderWindow* window, ScoreList* score_list)
 	this->font1.loadFromFile("Font/Spantaran.ttf");
 	this->menuBgTexture.setTexture(this->backgroundTexture);
 	this->menuBg1Texture.setTexture(this->background1Texture);
+	this->ownerID.setFont(font);
 	this->logoMainMenu.setFont(font);
 	this->logoMainMenu1.setFont(font);
 	this->play.setFont(font1);
@@ -220,6 +221,7 @@ void Menu::menuDraw()
 	if (getState() == 0)	//main menu
 	{
 		this->window->draw(menuBgTexture);
+		this->window->draw(ownerID);
 		this->window->draw(logoMainMenu1);
 		this->window->draw(logoMainMenu);
 		this->window->draw(play);
@@ -290,6 +292,11 @@ bool Menu::getGameStatus()
 
 void Menu::mainmenuUI()
 {
+	this->ownerID.setString("64010084 Khunanon Maneesong");
+	this->ownerID.setCharacterSize(24);
+	this->ownerID.setFillColor(Color(0, 255, 255));
+	this->ownerID.setPosition(Vector2f(1325, 1));
+
 	this->logoMainMenu.setString("Asteroids");
 	this->logoMainMenu.setCharacterSize(140);
 	this->logoMainMenu.setFillColor(Color(0, 255, 255));

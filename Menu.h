@@ -40,6 +40,7 @@ private:
 	Text sbScore;
 	Text playerName;
 	Text playerScore;
+	Text ownerID;
 	string name;
 	int state;
 	int totalscore;
