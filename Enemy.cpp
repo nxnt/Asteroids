@@ -11,9 +11,9 @@ Enemy::Enemy(Texture* texture, Vector2f player_position, double direction, float
 	this->enemyHp = enemyMaxHp;
 	this->direction = atan2f(player_position.y - position.y, player_position.x - position.x);
 	this->offset_direction = direction * M_PI / 180;
-	this->size = size;
+	this->size = size ;
 	this->flash = 0;
-	sprite.setScale(0.05 * size, 0.05 * size);
+	sprite.setScale(0.075 * size, 0.075 * size);
 }
 
 Enemy::~Enemy()

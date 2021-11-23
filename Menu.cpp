@@ -104,7 +104,10 @@ void Menu::menuUpdate()
 			this->enter.setFillColor(Color(255, 0, 0));
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
-				menuUpdateState(6);	//go to case 6 : "star game"
+				if (name != "")
+				{
+					menuUpdateState(6);	//go to case 6 : "star game"
+				}
 			}
 		}
 		else
@@ -307,7 +310,7 @@ void Menu::mainmenuUI()
 	this->play.setOrigin(this->play.getLocalBounds().width / 2, this->play.getLocalBounds().height / 2);
 	this->play.setPosition(Vector2f(960, 700));
 
-	this->scoreBoard.setString("SCOREBOARD");
+	this->scoreBoard.setString("LEADERBOARD");
 	this->scoreBoard.setCharacterSize(60);
 	this->scoreBoard.setOrigin(this->scoreBoard.getLocalBounds().width / 2, this->scoreBoard.getLocalBounds().height / 2);
 	this->scoreBoard.setPosition(Vector2f(960, 800));
@@ -354,13 +357,13 @@ void Menu::enternameUI()
 
 void Menu::scorboardUI()
 {
-	this->leaderboard.setString("HIGH SCORE");
+	this->leaderboard.setString("LEADERBOARD");
 	this->leaderboard.setCharacterSize(100);
 	this->leaderboard.setOutlineThickness(10);
 	this->leaderboard.setFillColor(Color(237, 0, 80, 255));
 	this->leaderboard.setOutlineColor(Color(0,0,0, 255));
 	this->leaderboard.setOrigin(this->leaderboard.getLocalBounds().width / 2, this->leaderboard.getLocalBounds().height / 2);
-	this->leaderboard.setPosition(Vector2f(980, 150));
+	this->leaderboard.setPosition(Vector2f(980, 170));
 
 	this->playerName.setCharacterSize(32);
 	this->playerScore.setCharacterSize(32);

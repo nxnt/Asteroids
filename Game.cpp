@@ -67,9 +67,17 @@ void Game::resetGame() {
 	this->bulletLevel = 1;
 	this->resetBulletLevel = -1;
 	this->game_time_elapsed = this->game_clock.restart();
-	player[0].resetPlayer();
+	player.clear();
 	enemies.clear();
 	item.clear();
+	this->player.push_back(
+		Player
+		(
+			&this->playerTexture,
+			Vector2f(this->window->getSize().x / 2, this->window->getSize().y / 2),
+			&this->bulletTexture
+		)
+	);
 }
 
 void Game::Update(float deltaTime)
@@ -145,7 +153,7 @@ void Game::Update(float deltaTime)
 			//àªç¤¡ÒÃà¡çºäÍà·Á Heal
 			else if (item[m].getGlobalBound().intersects(player[i].getGlobalBound()) && item[m].getType() == 2)
 			{
-				player[i].setHp(40);
+				player[i].setHp(50);
 				item.erase(item.begin() + m);
 			}
 			//àªç¤¡ÒÃà¡çºäÍà·Á UpBullet
@@ -181,7 +189,7 @@ void Game::Update(float deltaTime)
 					{
 						player[i].setHp(- 5 * enemies[j].getCurrentSize());
 						enemies[j].setEnemyHp(-25);
-						player[i].setInvincibility(300);
+						player[i].setInvincibility(150);
 						if (enemies[j].getCurrentSize() > 0) 
 						{
 							for (int i = 0; i < randrange(1, 3); i++) 
@@ -225,7 +233,6 @@ void Game::Update(float deltaTime)
 					{
 						score += 50 * enemies[l].getCurrentSize();
 						this->totalScore.setString(std::to_string(score));
-						//int rate = randrange(1,4);
 						//áµ¡µÑÇ
 						if (enemies[l].getCurrentSize() > 0) {
 							for (int i = 0; i < randrange(2, 3); i++) {
@@ -235,10 +242,11 @@ void Game::Update(float deltaTime)
 						//ÊØèÁ´ÃÍ»äÍà·Á¾ÔàÈÉ
 						if (enemies[l].getCurrentSize() == 1)
 						{
-							//if (rate == 1)
-							//{
+							int random = randrange(1, 100);
+							if (random >= 1 && random <= 20)
+							{
 								Game::spawnItem(Vector2f(enemies[l].getPosition().x, enemies[l].getPosition().y));
-							//}
+							}
 						}
 						enemies.erase(enemies.begin() + l);
 					}
@@ -303,8 +311,9 @@ bool Game::gameOver(bool gameStatus)
 
 void Game::spawnItem(Vector2f position)
 {
-	int random = randrange(1,30);
-	if (random == 4 || random == 7)
+	int game_time_second = this->game_time_elapsed.asSeconds();
+	int random = randrange(1,100);
+	if (random <= 30 + (game_time_second/100.f))
 	{
 		item.push_back
 		(
@@ -317,7 +326,7 @@ void Game::spawnItem(Vector2f position)
 			)
 		);
 	}
-	if (random == 2)
+	if (random >30 && random <= 50 + (game_time_second/100.f))
 	{
 		item.push_back
 		(
@@ -330,7 +339,7 @@ void Game::spawnItem(Vector2f position)
 			)
 		);
 	}
-	if (random == 1 || random == 3 || random == 9)
+	if (random > 50 && random <= 100 + (game_time_second/100.f) )
 	{
 		item.push_back
 		(
