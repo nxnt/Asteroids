@@ -207,7 +207,7 @@ void Menu::menuUpdate()
 			this->backToMenu.setFillColor(Color(255, 0, 0));
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
-				menuUpdateState(0);	//go to case 0 : "main menu"
+				menuUpdateState(5);	//go to case 5 : "reset game"
 			}
 		}
 		else
@@ -328,6 +328,11 @@ void Menu::menuDraw()
 bool Menu::getGameStatus()
 {
 	return this->gameStatus;
+}
+
+void Menu::setGameStatus(bool status)
+{
+	this->gameStatus = status;
 }
 
 void Menu::mainmenuUI()

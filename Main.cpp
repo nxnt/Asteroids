@@ -46,6 +46,7 @@ int main()
             game.Draw();
             if (game.gameOver(menu.getGameStatus()))
             {
+                menu.setGameStatus(false);
                 menu.menuUpdateState(4);
             }
             menu.menuUpdate();

@@ -77,5 +77,6 @@ public:
 	void menuUpdate();
 	void menuDraw();
 	bool getGameStatus();
+	void setGameStatus(bool status);
 };
 
