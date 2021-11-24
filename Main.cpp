@@ -73,6 +73,9 @@ int main()
         case 7: //close game
             window.close();
             break;
+        case 8:
+            menu.menuUpdate();
+            menu.menuDraw();
         default:
             break;
         }

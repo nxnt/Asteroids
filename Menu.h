@@ -8,6 +8,12 @@ private:
 	Event ev;
 	Texture backgroundTexture;
 	Texture background1Texture;
+	Texture infoTexture;
+	Texture infoIconTexture;
+	Texture exitIconTexture;
+	Sprite infoIcon;
+	Sprite exitIcon;
+	Sprite menuInfoTexture;
     Sprite menuBgTexture;
     Sprite menuBg1Texture;
 	RectangleShape enterNameMenu;
@@ -61,6 +67,7 @@ public:
 	void scorboardUI();
 	void pauseUI();
 	void gameoverUI();
+	void infoUI();
 	string getPlayerName();
 	void resetPlayerName();
 	void updatePlayerName(Event& event);

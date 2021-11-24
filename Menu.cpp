@@ -6,10 +6,16 @@ Menu::Menu(RenderWindow* window, ScoreList* score_list)
 	this->score_list = score_list;
 	this->backgroundTexture.loadFromFile("Texture/Background/menuBackground1n.png");
 	this->background1Texture.loadFromFile("Texture/Background/background.jpg");
+	this->infoTexture.loadFromFile("Texture/Background/info.png");
+	this->infoIconTexture.loadFromFile("Texture/Background/infoIcon1.png");
+	this->exitIconTexture.loadFromFile("Texture/Background/exitIcon.png");
 	this->font.loadFromFile("Font/Zebulon.ttf");
 	this->font1.loadFromFile("Font/Spantaran.ttf");
 	this->menuBgTexture.setTexture(this->backgroundTexture);
 	this->menuBg1Texture.setTexture(this->background1Texture);
+	this->menuInfoTexture.setTexture(this->infoTexture);
+	this->infoIcon.setTexture(this->infoIconTexture);
+	this->exitIcon.setTexture(this->exitIconTexture);
 	this->ownerID.setFont(font);
 	this->logoMainMenu.setFont(font);
 	this->logoMainMenu1.setFont(font);
@@ -43,6 +49,7 @@ Menu::Menu(RenderWindow* window, ScoreList* score_list)
 	scorboardUI();
 	pauseUI();
 	gameoverUI();
+	infoUI();
 }
 
 Menu::~Menu()
@@ -95,6 +102,18 @@ void Menu::menuUpdate()
 		{
 			this->quit.setScale(1, 1);
 			this->quit.setFillColor(Color(128, 255, 0));
+		}
+		if (infoIcon.getGlobalBounds().contains(Vector2f(Mouse::getPosition())))
+		{
+			this->infoIcon.setScale(0.2, 0.2);
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				menuUpdateState(8);	//go to case 8 : "info"
+			}
+		}
+		else
+		{
+			this->infoIcon.setScale(0.15,0.15);
 		}
 	}
 	else if (getState() == 1)
@@ -214,6 +233,21 @@ void Menu::menuUpdate()
 			this->backToMenu1.setFillColor(Color(128, 255, 0));
 		}
 	}
+	else if (getState() == 8)
+	{
+		if (exitIcon.getGlobalBounds().contains(Vector2f(Mouse::getPosition())))
+		{
+			this->exitIcon.setScale(0.075, 0.075);
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				menuUpdateState(0);	//go to case 0 : "main menu"
+			}
+		}
+		else
+		{
+			this->exitIcon.setScale(0.065, 0.065);
+		}
+	}
 }
 
 void Menu::menuDraw()
@@ -227,6 +261,7 @@ void Menu::menuDraw()
 		this->window->draw(play);
 		this->window->draw(scoreBoard);
 		this->window->draw(quit);
+		this->window->draw(infoIcon);
 	}
 	else if (getState() == 1)	//enter name
 	{
@@ -283,6 +318,11 @@ void Menu::menuDraw()
 		this->window->draw(score);
 		this->window->draw(backToMenu1);
 	}
+	else if (getState() == 8)
+	{
+		this->window->draw(menuInfoTexture);
+		this->window->draw(exitIcon);
+	}
 }
 
 bool Menu::getGameStatus()
@@ -326,6 +366,10 @@ void Menu::mainmenuUI()
 	this->quit.setCharacterSize(60);
 	this->quit.setOrigin(this->quit.getLocalBounds().width / 2, this->quit.getLocalBounds().height / 2);
 	this->quit.setPosition(Vector2f(960, 900));
+
+	this->infoIcon.setScale(0.15, 0.15);
+	this->infoIcon.setOrigin(this->infoIcon.getLocalBounds().width / 2, this->infoIcon.getLocalBounds().height / 2);
+	this->infoIcon.setPosition(1875, 1040);
 }
 
 void Menu::enternameUI()
@@ -453,6 +497,14 @@ void Menu::gameoverUI()
 	this->backToMenu1.setCharacterSize(28);
 	this->backToMenu1.setOrigin(this->backToMenu1.getLocalBounds().width / 2, this->backToMenu1.getLocalBounds().height / 2);
 	this->backToMenu1.setPosition(Vector2f(980, 625));
+}
+
+void Menu::infoUI()
+{
+	
+	this->exitIcon.setScale(0.065, 0.065);
+	this->exitIcon.setOrigin(this->exitIcon.getLocalBounds().width / 2, this->exitIcon.getLocalBounds().height / 2);
+	this->exitIcon.setPosition(1875, 40);
 }
 
 void Menu::menuUpdateState(int state)
